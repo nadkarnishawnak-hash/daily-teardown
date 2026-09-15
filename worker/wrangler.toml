@@ -1,11 +1,11 @@
 # Only needed if you deploy with the wrangler CLI. Pasting worker.js into the Cloudflare dashboard works without this.
-name = "jarvis"
+name = "odin"
 main = "worker.js"
 compatibility_date = "2026-01-01"
 
 # Non-secret settings (secrets go in via `wrangler secret put NAME` or the dashboard):
 [vars]
 USER_NAME = "sir"
-REALTIME_VOICE = "cedar"
+REALTIME_VOICE = "ash"
 REALTIME_MODEL = "gpt-realtime"
 # ALLOWED_ORIGIN = "https://<you>.github.io"

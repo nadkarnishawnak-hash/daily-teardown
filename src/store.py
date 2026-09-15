@@ -8,7 +8,7 @@ from .config import DATA
 LOG = DATA / "log.json"          # every edition ever produced
 QUEUE = DATA / "queue.json"      # businesses you asked for by replying to an email
 EPISODES = DATA / "episodes.json"  # podcast episodes (feeds the RSS)
-NOTES = DATA / "notes.json"        # notes/sources you asked Jarvis to save; delivered in the next email
+NOTES = DATA / "notes.json"        # notes/sources you asked Odin to save; delivered in the next email
 
 # The archetype map, rotated so every model gets covered systematically.
 ARCHETYPES = [

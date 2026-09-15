@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#0b0f19">
 <link rel="apple-touch-icon" href="cover.png">
-<title>Jarvis</title>
+<title>Odin</title>
 <style>
   :root { color-scheme: dark; }
   * { box-sizing: border-box; }
@@ -31,7 +31,7 @@
   #bar { height: 100%; width: 0; background: #3b82f6; transition: width .5s linear; }
   #captions { width: min(560px, 100%); min-height: 64px; font-size: 17px; line-height: 1.45; color: #cbd5e1; }
   #captions .you { color: #f59e0b; }
-  #captions .jarvis { color: #34d399; }
+  #captions .odin { color: #34d399; }
   .controls { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
   button { font: inherit; font-size: 17px; font-weight: 700; padding: 14px 26px; border-radius: 999px; border: 0;
     background: #f59e0b; color: #111827; cursor: pointer; }
@@ -53,18 +53,18 @@
   <div id="captions"></div>
   <div class="controls">
     <button id="start">Start</button>
-    <button id="talk" class="secondary" hidden>Hey Jarvis</button>
+    <button id="talk" class="secondary" hidden>Hey Odin</button>
     <button id="resume" class="secondary" hidden>Resume</button>
     <button id="settings" class="secondary">Settings</button>
   </div>
   <details><summary>Debug log</summary><pre id="log"></pre></details>
   <audio id="teardown" preload="auto" playsinline></audio>
-  <audio id="jarvisAudio" autoplay playsinline></audio>
+  <audio id="odinAudio" autoplay playsinline></audio>
 </main>
 
 <script type="module">
 // =====================================================================================
-//  Jarvis: wake-word driven conversation layer over the daily teardown audio.
+//  Odin: wake-word driven conversation layer over the daily teardown audio.
 //
 //  States:  init -> greeting -> playing <-> conversation -> ended
 //   playing:      teardown MP3 plays; on-device wake word listens; realtime mic is muted (free).
@@ -73,7 +73,7 @@
 // =====================================================================================
 
 const $ = id => document.getElementById(id);
-const teardown = $("teardown"), jarvisAudio = $("jarvisAudio");
+const teardown = $("teardown"), odinAudio = $("odinAudio");
 const log = (...a) => {
   const line = a.map(x => typeof x === "string" ? x : JSON.stringify(x)).join(" ");
   $("log").textContent = ($("log").textContent + line + "\n").slice(-8000);
@@ -85,22 +85,22 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
 
 // ---------------------------------------------------------------- settings (worker url + pin)
 const store = {
-  get: k => { try { return localStorage.getItem("jarvis." + k) || ""; } catch { return ""; } },
-  set: (k, v) => { try { localStorage.setItem("jarvis." + k, v); } catch {} },
+  get: k => { try { return localStorage.getItem("odin." + k) || ""; } catch { return ""; } },
+  set: (k, v) => { try { localStorage.setItem("odin." + k, v); } catch {} },
 };
 let workerUrl = store.get("workerUrl"), pin = store.get("pin");
 try {
-  const r = await fetch("jarvis-config.json", { cache: "no-store" });
+  const r = await fetch("odin-config.json", { cache: "no-store" });
   if (r.ok) { const j = await r.json(); if (j.workerUrl && !workerUrl) workerUrl = j.workerUrl; }
 } catch {}
 
 function askSettings(force = false) {
   if (force || !workerUrl) {
-    const v = prompt("Jarvis backend URL (from the Cloudflare Worker):", workerUrl || "https://jarvis.YOUR-SUBDOMAIN.workers.dev");
+    const v = prompt("Odin backend URL (from the Cloudflare Worker):", workerUrl || "https://odin.YOUR-SUBDOMAIN.workers.dev");
     if (v) { workerUrl = v.trim().replace(/\/$/, ""); store.set("workerUrl", workerUrl); }
   }
   if (force || !pin) {
-    const v = prompt("Jarvis PIN:", "");
+    const v = prompt("Odin PIN:", "");
     if (v) { pin = v.trim(); store.set("pin", pin); }
   }
 }
@@ -109,7 +109,7 @@ $("settings").onclick = () => askSettings(true);
 async function api(path, body) {
   const r = await fetch(workerUrl + path, {
     method: body ? "POST" : "GET",
-    headers: { "Content-Type": "application/json", "X-Jarvis-Pin": pin },
+    headers: { "Content-Type": "application/json", "X-Odin-Pin": pin },
     body: body ? JSON.stringify(body) : undefined,
   });
   const data = await r.json().catch(() => ({}));
@@ -177,10 +177,10 @@ function buildInstructions() {
   const recent = (logEntries || []).slice(-40)
     .map(e => `${e.date}: ${e.business} (${e.archetype}) - ${e.takeaway}`).join("\n");
   const quick = (edition.quick || []).map(q => `- ${q.what} (${q.source})`).join("\n");
-  return `You are Jarvis, ${name}'s personal business analyst, speaking through headphones while they drive.
+  return `You are Odin, ${name}'s personal business analyst, speaking through headphones while they drive.
 
 VOICE AND MANNER
-British, dry, economical, warm underneath. Short sentences. Precise. You address them as "${name}" occasionally, not every turn.
+Calm, deep, deliberate, dry. The voice of someone who has watched a thousand business models rise and fall and is quietly amused by most of them. Short sentences. Precise. Occasionally a flash of old-god deadpan ("Mortals keep rediscovering the razor and blades model. It keeps working."), never more than once per conversation. You address them as "${name}" occasionally, not every turn.
 Never say "great question", never restate the question, never read out URLs or markdown, never list more than three things aloud.
 Numbers are spoken naturally ("about four million a year", "eighty percent margins").
 When asked what you think, give a real, specific opinion grounded in the numbers, and disagree when the numbers warrant it.
@@ -208,7 +208,7 @@ ${recent || "(none yet)"}`;
 // ---------------------------------------------------------------- realtime session (OpenAI, WebRTC)
 let pc = null, dc = null, micTrack = null, micStream = null, micSender = null;
 let state = "init";
-let jarvisSpeaking = false, userSpeaking = false, responseInFlight = false, pendingTools = 0;
+let odinSpeaking = false, userSpeaking = false, responseInFlight = false, pendingTools = 0;
 let idleTimer = null, afterSpeech = null;
 const IDLE_MS = 7000;
 
@@ -226,7 +226,7 @@ async function connectRealtime() {
   } catch (e) { throw new Error("microphone permission denied (allow the mic for this site and tap Start again)"); }
   const { value: key } = await api("/session", { instructions: buildInstructions(), tools: TOOLS, voice: config.voice });
   pc = new RTCPeerConnection();
-  pc.ontrack = e => { jarvisAudio.srcObject = e.streams[0]; };
+  pc.ontrack = e => { odinAudio.srcObject = e.streams[0]; };
   pc.onconnectionstatechange = () => log("rtc", pc.connectionState);
   micTrack = micStream.getAudioTracks()[0];
   micTrack.onended = () => { log("mic track ended (another app or tab took the microphone?)"); setStatus("Mic lost: tap Start again"); };
@@ -253,20 +253,20 @@ function onEvent(ev) {
     case "input_audio_buffer.speech_started": userSpeaking = true; clearIdle(); orb("listening"); break;
     case "input_audio_buffer.speech_stopped": userSpeaking = false; orb("thinking"); break;
     case "response.created": responseInFlight = true; break;
-    case "output_audio_buffer.started": jarvisSpeaking = true; orb("speaking"); setStatus("Jarvis"); break;
+    case "output_audio_buffer.started": odinSpeaking = true; orb("speaking"); setStatus("Odin"); break;
     case "output_audio_buffer.stopped":
     case "output_audio_buffer.cleared":
-      jarvisSpeaking = false;
+      odinSpeaking = false;
       if (afterSpeech) { const f = afterSpeech; afterSpeech = null; f(); }
       else if (state === "conversation") { orb("listening"); setStatus("Listening"); armIdle(); }
       break;
-    case "response.output_audio_transcript.done": caption("jarvis", ev.transcript); break;
+    case "response.output_audio_transcript.done": caption("odin", ev.transcript); break;
     case "conversation.item.input_audio_transcription.completed": caption("you", ev.transcript); break;
     case "response.done":
       responseInFlight = false;
       handleToolCalls(ev.response);
       // A response with no audio (tool-only) never fires output_audio_buffer.stopped; keep the idle clock honest.
-      if (state === "conversation" && !jarvisSpeaking && !afterSpeech) armIdle();
+      if (state === "conversation" && !odinSpeaking && !afterSpeech) armIdle();
       break;
     case "error": log("realtime error", ev.error); break;
   }
@@ -276,7 +276,7 @@ function caption(who, text) {
   if (!text) return;
   const el = document.createElement("div");
   el.className = who;
-  el.textContent = (who === "you" ? "You: " : "Jarvis: ") + text;
+  el.textContent = (who === "you" ? "You: " : "Odin: ") + text;
   const box = $("captions");
   box.appendChild(el);
   while (box.children.length > 4) box.removeChild(box.firstChild);
@@ -331,7 +331,7 @@ function clearIdle() { if (idleTimer) { clearTimeout(idleTimer); idleTimer = nul
 
 function idleResume() {
   if (state !== "conversation") return;
-  if (userSpeaking || jarvisSpeaking || responseInFlight || pendingTools > 0) { armIdle(); return; }
+  if (userSpeaking || odinSpeaking || responseInFlight || pendingTools > 0) { armIdle(); return; }
   if (teardown.ended || teardown.currentTime >= (teardown.duration || Infinity) - 1) { endSession(); return; }
   const line = teardown.currentTime < 1 ? "Say only: Here it is." : "Say only: Picking up where we left off.";
   speak(line, resumePlayback);
@@ -358,7 +358,7 @@ async function resumePlayback() {
   afterSpeech = null;
   state = "playing";
   await setMic(false);
-  orb("playing"); setStatus("Say 'Jarvis' to interrupt");
+  orb("playing"); setStatus(`Say '${wakePhrase}' to interrupt`);
   $("talk").hidden = false; $("resume").hidden = true;
   try { await teardown.play(); } catch (e) { log("play failed", String(e)); setStatus("Tap Resume"); }
   await wakeOn();
@@ -381,7 +381,7 @@ teardown.addEventListener("timeupdate", () => {
 teardown.addEventListener("ended", () => { if (state === "playing") enterConversation("ended"); });
 
 // ---------------------------------------------------------------- wake word (on-device, free)
-let porcupine = null, wvp = null, wakeActive = false;
+let porcupine = null, wvp = null, wakeActive = false, wakePhrase = "Hey Odin";
 
 async function initWake() {
   if (!config.picovoiceKey) { log("no PICOVOICE_ACCESS_KEY; wake word disabled (use the button or headphone pause)"); return; }
@@ -389,12 +389,21 @@ async function initWake() {
     const pv = await import("https://esm.sh/@picovoice/porcupine-web@3");
     const wv = await import("https://esm.sh/@picovoice/web-voice-processor@4");
     wvp = wv.WebVoiceProcessor;
-    const keyword = config.keywordUrl
-      ? { publicPath: config.keywordUrl, label: "hey jarvis", customWritePath: "hey_jarvis.ppn", sensitivity: 0.6 }
+    // "Hey Odin" is a custom keyword (docs/hey_odin.ppn, trained free at console.picovoice.ai). Until that file
+    // exists, fall back to Porcupine's built-in "Jarvis" so the wake word still works.
+    let keywordUrl = config.keywordUrl;
+    if (!keywordUrl) {
+      const local = new URL("hey_odin.ppn", location.href).href;
+      try { if ((await fetch(local, { method: "HEAD", cache: "no-store" })).ok) keywordUrl = local; } catch {}
+    }
+    wakePhrase = keywordUrl ? "Hey Odin" : "Jarvis";
+    const keyword = keywordUrl
+      ? { publicPath: keywordUrl, label: "hey odin", customWritePath: "hey_odin.ppn", sensitivity: 0.6 }
       : { builtin: (pv.BuiltInKeyword && pv.BuiltInKeyword.Jarvis) || "Jarvis", sensitivity: 0.6 };
     porcupine = await pv.PorcupineWorker.create(config.picovoiceKey, keyword, onWake,
       { publicPath: config.modelUrl, customWritePath: "porcupine_params.pv" });
-    log("wake word ready:", config.keywordUrl ? "hey jarvis" : "jarvis");
+    log("wake word ready:", wakePhrase);
+    if (wakePhrase !== "Hey Odin") log("tip: add docs/hey_odin.ppn to use 'Hey Odin' (see worker/README.md)");
   } catch (e) {
     log("wake word failed to load:", String(e.message || e), "- falling back to the button / headphone pause");
     porcupine = null;
@@ -429,7 +438,7 @@ async function keepAwake() {
 }
 
 if ("mediaSession" in navigator) {
-  // Headphone / steering-wheel button: pause = talk to Jarvis, play = resume the teardown.
+  // Headphone / steering-wheel button: pause = talk to Odin, play = resume the teardown.
   navigator.mediaSession.setActionHandler("pause", () => { if (state === "playing") enterConversation("button"); });
   navigator.mediaSession.setActionHandler("play", () => { if (state === "conversation") idleResume(); });
 }

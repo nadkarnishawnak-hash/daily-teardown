@@ -76,7 +76,7 @@ jobs:
           PODCAST_TITLE: ${{ vars.PODCAST_TITLE }}
           PODCAST_AUTHOR: ${{ vars.PODCAST_AUTHOR }}
           SITE_URL: ${{ vars.SITE_URL }}
-          JARVIS_WORKER_URL: ${{ vars.JARVIS_WORKER_URL }}
+          ODIN_WORKER_URL: ${{ vars.ODIN_WORKER_URL }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           python -m src.run --publish \

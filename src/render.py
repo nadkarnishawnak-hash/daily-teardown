@@ -61,15 +61,15 @@ def _shell(*, title: str, header_line: str, body: str, footer: str) -> str:
 
 
 def _audio_box(audio_url: str | None, duration: str | None, feed_url: str, archive_url: str | None,
-               jarvis_url: str | None = None) -> str:
+               odin_url: str | None = None) -> str:
     if audio_url:
         primary = (f'<a href="{esc(audio_url)}" style="display:inline-block;background:#111827;color:#ffffff;'
                    f'text-decoration:none;font-weight:700;font-size:15px;padding:11px 18px;border-radius:8px">'
                    f'&#9654;&nbsp; Listen to this edition{(" (" + duration + ")") if duration else ""}</a>')
-        if jarvis_url:
-            primary += (f' <a href="{esc(jarvis_url)}" style="display:inline-block;background:#f59e0b;color:#111827;'
+        if odin_url:
+            primary += (f' <a href="{esc(odin_url)}" style="display:inline-block;background:#f59e0b;color:#111827;'
                         f'text-decoration:none;font-weight:700;font-size:15px;padding:11px 18px;border-radius:8px;'
-                        f'margin-left:8px">&#127908;&nbsp; Talk to Jarvis</a>')
+                        f'margin-left:8px">&#127908;&nbsp; Talk to Odin</a>')
     else:
         primary = '<span style="font-size:14px;color:#6b7280">Audio unavailable for this edition.</span>'
     parts = [f'<a href="{esc(feed_url)}" {_LINK}>Podcast feed</a>']
@@ -96,7 +96,7 @@ def _quickhits(items: list[dict]) -> str:
 
 
 def _notes(notes: list[dict]) -> str:
-    """Notes and sources you asked Jarvis to save during yesterday's session."""
+    """Notes and sources you asked Odin to save during yesterday's session."""
     if not notes:
         return ""
     rows = []
@@ -104,7 +104,7 @@ def _notes(notes: list[dict]) -> str:
         extra = f' <span {_SMALL}>{link(n["url"], "source")}</span>' if n.get("url") else ""
         when = f' <span {_SMALL}>({esc(n.get("edition") or n.get("created", "")[:10])})</span>'
         rows.append(f'<li {_LI}>{inline(n.get("text"))}{extra}{when}</li>')
-    return h2("From your Jarvis session") + f'<ul style="padding-left:20px;margin:0">{"".join(rows)}</ul>'
+    return h2("From your Odin session") + f'<ul style="padding-left:20px;margin:0">{"".join(rows)}</ul>'
 
 
 def _footer(cfg, archive_index_url: str) -> str:
@@ -142,7 +142,7 @@ def render_teardown(t: dict, quick: list[dict], *, cfg, date_long: str, audio_ur
                       for s in (t.get("sources") or []))
 
     body = f"""
-{_audio_box(audio_url, duration, cfg.feed_url, archive_url, cfg.jarvis_url)}
+{_audio_box(audio_url, duration, cfg.feed_url, archive_url, cfg.odin_url)}
 <h1 style="margin:18px 0 6px;font-size:26px;line-height:1.2;color:#111827">{esc(t.get("business"))}</h1>
 <div style="font-size:15px;color:#4b5563;margin-bottom:4px">{inline(t.get("subject"))}</div>
 <div {_SMALL}>Archetype: <strong>{esc(t.get("archetype"))}</strong>{(" &middot; " + inline(t.get("recency"))) if t.get("recency") else ""}
@@ -197,7 +197,7 @@ def render_synthesis(s: dict, quick: list[dict], *, cfg, date_long: str, audio_u
         f'<li {_LI}><strong>{inline(p.get("principle"))}</strong><br><span style="color:#4b5563">{inline(p.get("evidence"))}</span></li>'
         for p in (s.get("principles") or []))
     body = f"""
-{_audio_box(audio_url, duration, cfg.feed_url, archive_url, cfg.jarvis_url)}
+{_audio_box(audio_url, duration, cfg.feed_url, archive_url, cfg.odin_url)}
 <h1 style="margin:18px 0 6px;font-size:26px;line-height:1.2;color:#111827">{esc(s.get("title"))}</h1>
 <div style="font-size:15px;color:#4b5563">{inline(s.get("subject"))}</div>
 

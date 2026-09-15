@@ -24,9 +24,9 @@ src/prompts.py   the prompts                 src/podcast.py   cover art, MP3 hos
 src/llm.py       Claude + web search         src/archive.py   markdown + static site + search index
 src/store.py     log / queue / rotation      src/capture.py   IMAP reply capture
 src/mailer.py    Gmail SMTP                  data/            log.json, queue.json, episodes.json
-docs/            GitHub Pages site (feed.xml, cover.png, index.html, editions/, jarvis.html)
+docs/            GitHub Pages site (feed.xml, cover.png, index.html, editions/, odin.html)
 archive/         markdown copy of every edition
-worker/          Cloudflare Worker backend for Jarvis (keys live here, never in the page)
+worker/          Cloudflare Worker backend for Odin (keys live here, never in the page)
 ```
 
 ## Setup (about 20 minutes, once)
@@ -81,13 +81,13 @@ After the first real run, open `https://<you>.github.io/<repo>/feed.xml` in a br
 
 That's it. From here it runs itself.
 
-## Jarvis (voice layer, optional)
-`docs/jarvis.html` turns the edition into a conversation: it plays the MP3, listens on-device for "Jarvis",
+## Odin (voice layer, optional)
+`docs/odin.html` turns the edition into a conversation: it plays the MP3, listens on-device for "Odin",
 pauses, lets you ask anything (barge-in works), can look things up live, queue businesses, and save notes
 (delivered in the next morning's email), then resumes where it left off. Setup is in
 [worker/README.md](worker/README.md): one Cloudflare Worker (free) holding an OpenAI key (voice), your
 Anthropic key (research), a Picovoice key (wake word) and a GitHub token (queue/notes). Set the repo variable
-`JARVIS_WORKER_URL` and every email gets a **Talk to Jarvis** button. Add the page to your phone's home screen;
+`ODIN_WORKER_URL` and every email gets a **Talk to Odin** button. Add the page to your phone's home screen;
 the screen must stay on (iOS kills background mic access), so mount the phone.
 
 ## Running locally (optional)

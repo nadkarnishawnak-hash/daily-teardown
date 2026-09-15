@@ -1,7 +1,7 @@
 /**
- * Jarvis backend: a Cloudflare Worker that holds every secret so the public web page never does.
+ * Odin backend: a Cloudflare Worker that holds every secret so the public web page never does.
  *
- * Endpoints (all require header  X-Jarvis-Pin: <JARVIS_PIN>):
+ * Endpoints (all require header  X-Odin-Pin: <ODIN_PIN>):
  *   GET  /config    -> { picovoiceKey, modelUrl, keywordUrl, userName, voice }
  *   POST /session   -> mints a short-lived OpenAI Realtime client secret bound to the persona + tools
  *   POST /research  -> { question, context } -> Claude + web search -> { answer }
@@ -27,9 +27,9 @@ export default {
         return json({
           picovoiceKey: env.PICOVOICE_ACCESS_KEY || "",
           modelUrl: env.PORCUPINE_MODEL_URL || PORCUPINE_MODEL_DEFAULT,
-          keywordUrl: env.PORCUPINE_KEYWORD_URL || "",      // optional custom "Hey Jarvis" .ppn
+          keywordUrl: env.PORCUPINE_KEYWORD_URL || "",      // optional custom "Hey Odin" .ppn
           userName: env.USER_NAME || "sir",
-          voice: env.REALTIME_VOICE || "cedar",
+          voice: env.REALTIME_VOICE || "ash",
         }, 200, cors);
       }
       if (url.pathname === "/session" && request.method === "POST") {
@@ -51,9 +51,9 @@ export default {
 // ---------------------------------------------------------------- auth / cors / helpers
 
 function authorized(request, env) {
-  if (!env.JARVIS_PIN) return false;
-  const pin = request.headers.get("X-Jarvis-Pin") || "";
-  return pin.length === env.JARVIS_PIN.length && pin === env.JARVIS_PIN;
+  if (!env.ODIN_PIN) return false;
+  const pin = request.headers.get("X-Odin-Pin") || "";
+  return pin.length === env.ODIN_PIN.length && pin === env.ODIN_PIN;
 }
 
 function corsHeaders(env, origin) {
@@ -62,7 +62,7 @@ function corsHeaders(env, origin) {
   return {
     "Access-Control-Allow-Origin": ok ? (origin || "*") : allowed[0],
     "Access-Control-Allow-Methods": "GET,POST,OPTIONS",
-    "Access-Control-Allow-Headers": "Content-Type,X-Jarvis-Pin",
+    "Access-Control-Allow-Headers": "Content-Type,X-Odin-Pin",
     "Access-Control-Max-Age": "86400",
     "Vary": "Origin",
   };
@@ -93,7 +93,7 @@ async function createSession(env, body) {
   const base = {
     type: "realtime",
     model: env.REALTIME_MODEL || REALTIME_MODEL_DEFAULT,
-    instructions: body.instructions || "You are Jarvis.",
+    instructions: body.instructions || "You are Odin.",
     tools: body.tools || [],
     tool_choice: "auto",
     audio: {
@@ -104,7 +104,7 @@ async function createSession(env, body) {
         },
         transcription: { model: env.TRANSCRIBE_MODEL || "gpt-4o-mini-transcribe" },
       },
-      output: { voice: body.voice || env.REALTIME_VOICE || "cedar" },
+      output: { voice: body.voice || env.REALTIME_VOICE || "ash" },
     },
   };
 
@@ -165,9 +165,9 @@ async function action(env, body) {
     const request = String(body.request || "").trim();
     if (!request) return { ok: false, error: "empty request" };
     await updateJson(env, "data/queue.json", list => {
-      list.push({ request, note: body.note || "", received: now, source: "jarvis" });
+      list.push({ request, note: body.note || "", received: now, source: "odin" });
       return list;
-    }, `Jarvis: queue ${request}`);
+    }, `Odin: queue ${request}`);
     return { ok: true, queued: request, position: "next non-Sunday edition" };
   }
   if (body.action === "save_note") {
@@ -176,7 +176,7 @@ async function action(env, body) {
     await updateJson(env, "data/notes.json", list => {
       list.push({ text, url: body.url || "", edition: body.edition || "", created: now, included: false });
       return list;
-    }, "Jarvis: save note");
+    }, "Odin: save note");
     return { ok: true, saved: text, delivery: "included in tomorrow morning's email" };
   }
   return { ok: false, error: `unknown action ${body.action}` };
@@ -186,7 +186,7 @@ async function updateJson(env, path, mutate, message) {
   const api = `https://api.github.com/repos/${env.GITHUB_REPO}/contents/${path}`;
   const headers = {
     Authorization: `Bearer ${env.GITHUB_TOKEN}`, Accept: "application/vnd.github+json",
-    "User-Agent": "jarvis-worker", "X-GitHub-Api-Version": "2022-11-28", "Content-Type": "application/json",
+    "User-Agent": "odin-worker", "X-GitHub-Api-Version": "2022-11-28", "Content-Type": "application/json",
   };
   let sha, list = [];
   const get = await fetch(api, { headers });

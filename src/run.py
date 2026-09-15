@@ -148,7 +148,7 @@ def main() -> int:
     archive.write_edition_page(date=today, slug=slug, html=html)
     podcast.ensure_cover(cfg)
 
-    # Structured copy of the edition for the Jarvis voice page (+ pointer to the latest one).
+    # Structured copy of the edition for the Odin voice page (+ pointer to the latest one).
     edition_rel = f"editions/{today}-{slug}.json"
     save(DOCS / edition_rel, {
         "date": today, "kind": kind, "title": title, "archetype": data.get("archetype", "synthesis"),
@@ -158,8 +158,8 @@ def main() -> int:
     save(DOCS / "latest.json", {"date": today, "slug": slug, "title": title, "kind": kind,
                                 "archetype": data.get("archetype", "synthesis"), "json_url": edition_rel,
                                 "mp3_url": published_audio, "page_url": page_url})
-    if cfg.jarvis_worker_url:
-        save(DOCS / "jarvis-config.json", {"workerUrl": cfg.jarvis_worker_url.rstrip("/")})
+    if cfg.odin_worker_url:
+        save(DOCS / "odin-config.json", {"workerUrl": cfg.odin_worker_url.rstrip("/")})
 
     if published_audio:
         description = (data.get("setup") or data.get("intro") or "").strip()

@@ -53,8 +53,8 @@ class Config:
         if not self.site_url.endswith("/"):
             self.site_url += "/"
 
-        # Jarvis (voice layer). Set to the Cloudflare Worker URL once it's deployed.
-        self.jarvis_worker_url = env("JARVIS_WORKER_URL")
+        # Odin (voice layer). Set to the Cloudflare Worker URL once it's deployed.
+        self.odin_worker_url = env("ODIN_WORKER_URL")
 
         # Podcast metadata
         self.podcast_title = env("PODCAST_TITLE", "The Daily Teardown")
@@ -74,8 +74,8 @@ class Config:
         return self.site_url + "cover.png"
 
     @property
-    def jarvis_url(self) -> str | None:
-        return self.site_url + "jarvis.html" if self.jarvis_worker_url else None
+    def odin_url(self) -> str | None:
+        return self.site_url + "odin.html" if self.odin_worker_url else None
 
     def can_email(self) -> bool:
         return bool(self.gmail_address and self.gmail_app_password and self.recipient)
