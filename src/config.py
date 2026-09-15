@@ -14,7 +14,7 @@ ET = ZoneInfo("America/New_York")
 
 
 def env(name: str, default=None):
-    v = os.environ.get(name)
+    v = (os.environ.get(name) or "").strip()  # secrets pasted with stray newlines would break HTTP headers
     return v if v not in (None, "") else default
 
 

@@ -14,7 +14,7 @@ from html import unescape
 from .config import Config
 from .mailer import BRIEF_HEADER
 
-QUOTE_MARKERS = re.compile(r"^(>|On .+wrote:|-{3,} ?Original Message|From: .+@)", re.I)
+QUOTE_MARKERS = re.compile(r"^(>|On .+wrote:|-{3,} ?(Original|Forwarded) [Mm]essage|From: .+@|Sent from my)", re.I)
 
 
 def _text_of(msg) -> str:
@@ -72,8 +72,9 @@ def fetch_requests(cfg: Config) -> list[dict]:
             if msg.get(BRIEF_HEADER):
                 continue  # one of our own briefs (you send to yourself), not a reply
             subject = str(make_header(decode_header(msg.get("Subject", ""))))
-            is_reply = bool(msg.get("In-Reply-To") or msg.get("References") or subject.lower().startswith("re:"))
-            if not is_reply:
+            # Only a reply to one of OUR briefs counts (their Message-IDs end in @daily-teardown).
+            threaded = (msg.get("In-Reply-To") or "") + " " + (msg.get("References") or "")
+            if "@daily-teardown" not in threaded:
                 continue
             request = _typed_part(_text_of(msg))
             box.store(num, "+FLAGS", "\\Seen")  # never process this message again

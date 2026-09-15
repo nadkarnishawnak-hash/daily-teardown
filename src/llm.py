@@ -5,13 +5,13 @@ import sys
 
 import anthropic
 
-from .config import Config
+from .config import Config, env
 
 WEB_TOOLS_MAX_FETCH = 6
 
 
 def _client() -> anthropic.Anthropic:
-    return anthropic.Anthropic()  # reads ANTHROPIC_API_KEY
+    return anthropic.Anthropic(api_key=env("ANTHROPIC_API_KEY"))
 
 
 def _tools(cfg: Config, max_searches: int) -> list[dict]:
