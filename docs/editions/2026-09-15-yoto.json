@@ -1,0 +1,164 @@
+{
+  "date": "2026-09-15",
+  "kind": "teardown",
+  "title": "Yoto",
+  "archetype": "razor-and-blades",
+  "mp3_url": "https://github.com/nadkarnishawnak-hash/daily-teardown/releases/download/ep-2026-09-15/2026-09-15-yoto.mp3",
+  "page_url": "https://nadkarnishawnak-hash.github.io/daily-teardown/editions/2026-09-15-yoto.html",
+  "duration_sec": 262,
+  "data": {
+    "business": "Yoto",
+    "url": "https://yotoplay.com",
+    "archetype": "razor-and-blades",
+    "recency": "Founded 2017 (Music Business Worldwide, 2024); in 2026 it became the poster child of the kids-tech backlash, profiled by The New York Times in late June/early July 2026 and by Forbes on 18 August 2026, weeks after a Los Angeles jury found Meta and Google liable on 25 March 2026 for designing feeds to addict a minor.",
+    "subject": "Yoto's $128M year came off a $100 box, but the profit is in $6-$15 cards",
+    "confidence": "Medium-high: 2024 revenue and losses come from Yoto's filed accounts as reported by the Financial Times and relayed in a July 2026 teardown; pricing is public. Card-level gross margin is not disclosed, and a GetLatka estimate of $44.2M ARR contradicts the filings, so treat third-party revenue estimates as noise.",
+    "setup": "Yoto makes a screen-free audio player for young kids: a rubber-cased box with no camera, no microphone, no ads and no algorithm. The child picks up a physical card, slides it into a slot on top, and a story, album or lesson plays. It started on Kickstarter and now sells across the US, UK, Canada, Australia, New Zealand, Singapore and Hong Kong.",
+    "guess_prompt": "Before you scroll: who is the economic buyer here, and where does the money actually accumulate? Guess the split between the device and everything after it.",
+    "numbers": [
+      {
+        "label": "Revenue / run-rate",
+        "value": "£94.8m (about $128m) in 2024, up 86% year over year",
+        "source": "Business Model Analyst (citing Yoto accounts reported to the Financial Times), 2026",
+        "url": "https://businessmodelanalyst.com/yoto-business-model-techlash/"
+      },
+      {
+        "label": "Pricing",
+        "value": "Yoto Player about $100, Yoto Mini about $70, audio cards $6-$15 each",
+        "source": "Business Model Analyst, 2026",
+        "url": "https://businessmodelanalyst.com/yoto-business-model-techlash/"
+      },
+      {
+        "label": "Margins / unit economics",
+        "value": "Hardware sold at low margin, cards carry the margin. At company level 2024 was a £8.4m loss on £94.8m revenue (up from a £3.4m loss in 2023), including a £7m battery-recall charge. Illustrative blade-vs-razor math (est.): $70 Mini + 10 cards x ~$10 = ~$100 of cards against a $70 device, so consumables pass the device inside about two years.",
+        "source": "Business Model Analyst, 2026 (est. arithmetic ours, using published card prices)",
+        "url": "https://businessmodelanalyst.com/yoto-business-model-techlash/"
+      },
+      {
+        "label": "Funding / exit",
+        "value": "$22m equity round in 2024 (half from the Chan Zuckerberg Initiative) plus a $15m HSBC UK Growth Lending package in October 2024; still private",
+        "source": "Music Business Worldwide, 2024",
+        "url": "https://www.musicbusinessworldwide.com/kids-audio-platform-yoto-aims-to-double-revenue-with-15m-funding-package-from-hsbc/"
+      },
+      {
+        "label": "Blade catalogue",
+        "value": "1,200+ Yoto Cards with content from Disney, Penguin Random House, Pottermore, Universal Music and Warner Music",
+        "source": "Music Business Worldwide, 2024",
+        "url": "https://www.musicbusinessworldwide.com/kids-audio-platform-yoto-aims-to-double-revenue-with-15m-funding-package-from-hsbc/"
+      },
+      {
+        "label": "Market context",
+        "value": "Global kids audio player market put at $1.43bn; Germany's Tonies is roughly 4x Yoto's revenue, listed, profitable, growing ~33% a year on flat $17.99 figurines",
+        "source": "Forbes, 2026; Business Model Analyst, 2026",
+        "url": "https://www.forbes.com/sites/sharonedelson/2026/08/18/yoto-is-making-a-mark-in-the-143-billion-global-kids-audio-player-market/"
+      }
+    ],
+    "model": {
+      "economic_buyer": "Parents and gift-giving grandparents. The budget already exists as toy, book and birthday-present spend, and the card slots neatly into the sub-$15 impulse gift slot that used to be a picture book.",
+      "emotional_driver": "Guilt relief. Handing a four-year-old a tablet feels like a small parenting failure; handing them a card that plays a story feels like a win. The purchase buys permission to be hands-off.",
+      "recurring_vs_one_time": "Device is one-time and roughly once per child. Cards are unlimited, repeat, and re-triggered by every birthday, holiday and new interest phase. No subscription is required to make the model recur, which is why it survives subscription fatigue.",
+      "margins": "Hardware near cost by design, cards carry the gross margin because the physical good is a printed NFC card and the content is licensed once and streamed from Yoto's servers. Company-level profit is still negative (£8.4m loss in 2024) because Yoto is buying installed base and ate a £7m recall.",
+      "capital_to_start": "$150k-$500k for a credible clone: $60k-$150k for tooling and a first small hardware run, $30k-$100k for safety and compliance testing on a child product, and the rest for content licensing advances and inventory. Content-only blades for an existing platform can start under $20k.",
+      "moat": "The card is a key, not a file. Content sits on Yoto's servers and the card unlocks it, so nobody can print compatible blades. Layered on top: exclusive licences with Disney, Penguin Random House and the major labels, plus a safety-first brand that parents actively recommend. The lock-in is sold as child protection, which is the cleverest part.",
+      "distribution": "Parent word of mouth and creator content (TikTok tags, Facebook owner groups), then retail shelves at Amazon and Target where the cards sit as impulse buys next to the box."
+    },
+    "why_it_works": "Yoto sells a device parents feel virtuous buying, at a price that is easy to say yes to, and that device turns a household into a permanent retail channel for a proprietary $6-$15 consumable. Because the card only unlocks content on Yoto's servers, every future purchase is captured: no third party can make blades, no competitor's cards fit the slot, and every birthday and holiday is a fresh reason to buy one. Growth in the installed base therefore compounds into content revenue with no new customer acquisition cost, which is how a toddler speaker company got to £94.8m in revenue growing 86% a year (Business Model Analyst, 2026). The catch is the same as every hardware razor: the base is expensive to build, safety is a real line item (£7m recall charge in 2024), and until the card volume outruns that spend the profit is deferred, which is exactly what Yoto's 2024 loss shows.",
+    "where_else": [
+      {
+        "name": "Tonies (Toniebox)",
+        "note": "Same archetype with figurines instead of cards at a flat $17.99, and it proves the model can be profitable: roughly 4x Yoto's revenue, listed in Frankfurt, already in the black (Business Model Analyst, 2026)."
+      },
+      {
+        "name": "Cirkul",
+        "note": "The water bottle is the razor and the flavor cartridges are the proprietary blade, sold in retail multipacks to the same household forever."
+      },
+      {
+        "name": "Nespresso",
+        "note": "The original modern version: subsidise the machine, patent and control the pod, let the installed base do the selling."
+      }
+    ],
+    "how_to_start": {
+      "first_step": "Pick a repeat-purchase content or consumable niche you already understand (Montessori preschools, language learning, faith-based kids audio, physio exercise programmes) and pre-sell 100 units of just the blade, as an add-on to hardware that already exists. If people will buy the tenth card, the box is worth building. If they only buy the first, stop.",
+      "hardest_part": "Getting rights holders to license content before you have an installed base, and holding the nerve to sell hardware near cost while cash goes out the door. Copycats either can't get the catalogue or try to make money on the razor, and both failures kill the flywheel. Then there is the part nobody budgets for: a single battery or choking-hazard recall on a children's product can erase a year of profit."
+    },
+    "takeaway": "Sell the thing they buy once at cost, and own the thing they buy again. The model only prints money when the repeat purchase is technically or legally impossible to buy from anyone else.",
+    "sources": [
+      {
+        "title": "Yoto Is Winning the Techlash. The Money Is in the Cards, Not the Box",
+        "url": "https://businessmodelanalyst.com/yoto-business-model-techlash/",
+        "year": "2026"
+      },
+      {
+        "title": "How Yoto Turned Parent Advocacy Into a $127M Kids' Audio Brand",
+        "url": "https://influencermarketinghub.com/how-yoto-turned-parent-advocacy-kids-audio-brand/",
+        "year": "2026"
+      },
+      {
+        "title": "Yoto Is Making A Mark In The $1.43 Billion Global Kids Audio Player Market",
+        "url": "https://www.forbes.com/sites/sharonedelson/2026/08/18/yoto-is-making-a-mark-in-the-143-billion-global-kids-audio-player-market/",
+        "year": "2026"
+      },
+      {
+        "title": "Kids' audio platform Yoto aims to double revenue with $15m funding package from HSBC",
+        "url": "https://www.musicbusinessworldwide.com/kids-audio-platform-yoto-aims-to-double-revenue-with-15m-funding-package-from-hsbc/",
+        "year": "2024"
+      },
+      {
+        "title": "Yoto Revenue 2025 (third-party estimate, flagged as inconsistent with filings)",
+        "url": "https://getlatka.com/companies/yotoplay.com",
+        "year": "2026"
+      }
+    ],
+    "audio_script": "This is The Daily Teardown for Tuesday, September fifteenth, twenty twenty-six. Today's archetype: razor-and-blades. A hundred-dollar plastic speaker for toddlers pulled about a hundred and twenty-eight million dollars in a year, and the speaker is almost beside the point.\n\nHere's the setup. Yoto is a British company that makes a screen-free audio player for kids. Rubber case, no camera, no microphone, no ads, no algorithm. A four-year-old picks up a physical card, slides it into a slot on top of the box, and a story or an album plays. The kid drives. The parent doesn't have to hand over a tablet. It started life on Kickstarter and now sells across the US, the UK, Canada, Australia and Asia, according to Music Business Worldwide.\n\nBefore I tell you how the money actually flows... take a guess. Who is the real buyer here, and what do they keep paying for? I'll give you a second.\n\n...\n\nThe parent pays twice. Once for the box, and then forever for the cards. Yoto sells the standard Player at around a hundred dollars and the Mini at around seventy. That's the razor, and it moves on thin margin. The blades are the cards, six to fifteen dollars each, and no household buys just one. They build a shelf. Business Model Analyst, writing in July and working off Yoto's filed accounts as reported by the Financial Times, put twenty twenty-four revenue at ninety-four point eight million pounds, roughly a hundred and twenty-eight million dollars, up eighty-six percent year over year.\n\nRun the arithmetic on one family. Seventy dollars for a Mini, then ten cards over two years at about ten dollars each. That's a hundred dollars of blades against a seventy dollar razor, and that's my estimate, not a company figure. The shelf outgrows the box fast, and every card sells to the same address at zero acquisition cost.\n\nNow the honest part, because this is where most people get the story wrong. The New York Times profiled Yoto this summer as a bright spot in the backlash against kids and screens, and described the company as slightly profitable, something like seven hundred and sixty-eight thousand dollars. The filings say otherwise. Yoto lost eight point four million pounds in twenty twenty-four, and about seven million of that was a battery recall charge. So this is a fast-growing, venture-and-debt-backed company spending hard to own the installed base, not a quiet little cash machine. And when your razor is a physical object handled by toddlers, safety isn't a tail risk, it's a line item.\n\nWhy does the model work? Because the card is a key, not a file. The audio lives on Yoto's servers and the card unlocks it, so third parties can't just print compatible blades. That's the whole trick. And notice the marketing does double duty: screen-free is what parents want, and screen-free is what justifies a closed ecosystem with no browsing and no app store. The safety story and the lock-in story are the same story. On top of that, Yoto has licensing deals with Disney, Penguin Random House, Universal and Warner, and a catalogue of well over a thousand cards. Those deals are a wall, not a feature.\n\nWhere else does this show up? Germany's Tonies runs the identical model with collectible figurines you place on top of the box at a flat seventeen ninety-nine. Tonies is roughly four times Yoto's size, listed in Frankfurt, already profitable, and growing about a third a year instead of eighty-six percent. Same archetype, two very different tempos. You also see it in Cirkul, where the bottle is the razor and the flavor cartridges are the blades, and in Nespresso, printer ink and insulin pumps.\n\nIf you wanted to start one this week, don't start with hardware. Start with the blade. Find a niche where people already buy content repeatedly, then design a cheap physical token that makes the next purchase an impulse instead of a decision. Prove the repeat first, build the box second.\n\nThe hardest part isn't the manufacturing. It's the rights and the returns. You need content partners to say yes before you have an installed base, and you need the discipline to sell the device near cost while your investors watch the margin line. That's what kills copycats.\n\nTakeaway: sell the thing they buy once at cost, and own the thing they buy again. The model only prints money if the second purchase can't be bought anywhere else.\n\nThat's the teardown. Talk tomorrow."
+  },
+  "quick": [
+    {
+      "lane": "ai",
+      "what": "OpenAI's Agents API entered public beta Sept 10, exposing the Codex harness via one managed endpoint with gpt-6-astra as default and no separate API fee beyond model and tool usage.",
+      "why": "Kills the need to build custom orchestration, session and recovery loops for long-running agents; you focus on tools, permissions and business logic.",
+      "source": "AI Agent Store",
+      "date": "2026-09-14",
+      "url": "https://aiagentstore.ai/ai-agent-news/2026-september"
+    },
+    {
+      "lane": "ai",
+      "what": "Abacus.AI released the Smaug open-weight model family (Agentic, Flash, Mini) claiming 15-20% gains on long-running agent loops with no added inference cost.",
+      "why": "Self-hostable agent-grade models mean sensitive data and credentials never leave your cloud, with a hosted RouteLLM path to start cheap.",
+      "source": "AI Agent Store",
+      "date": "2026-09-13",
+      "url": "https://aiagentstore.ai/ai-agent-news/2026-september"
+    },
+    {
+      "lane": "startup",
+      "what": "Temporal raised $550M led by Lightspeed at a $12.55B valuation for durable execution infrastructure.",
+      "why": "The market is pricing agent reliability as its own category; if your agents run longer than a request cycle, you need a retry and state layer.",
+      "source": "Tech Funding News",
+      "date": "2026-09-15",
+      "url": "https://techfundingnews.com/temporal-raises-550m-led-by-lightspeed-at-12-55b-valuation-why-ai-agents-need-infrastructure-that-can-survive-failure/"
+    },
+    {
+      "lane": "startup",
+      "what": "OpenAI acquired a startup founded by former Apple engineers for over $300M as it pushes into AI devices.",
+      "why": "OpenAI moving to own hardware surfaces changes where distribution lives for anyone building on its models.",
+      "source": "Tech Funding News",
+      "date": "2026-09-15",
+      "url": "https://techfundingnews.com/openai-buys-former-apples-engineers-startup-for-over-300m-as-it-builds-ai-devices/"
+    },
+    {
+      "lane": "startup",
+      "what": "Jack & Jill raised a $40M Series A led by Air Street Capital for its dual-agent hiring marketplace.",
+      "why": "Agent-to-agent transactions are getting funded at real scale in recruiting; expect candidate-side agents in your hiring funnel soon.",
+      "source": "Tech Funding News",
+      "date": "2026-09-15",
+      "url": "https://techfundingnews.com/jack-and-jill-raises-40m-series-a-air-street-capital-ai-recruiting/"
+    },
+    {
+      "lane": "dtc",
+      "what": "Visa published a Trust Index for agentic commerce, finding consumers separate AI tools from payment brands and rank Visa most trusted for agent-initiated transactions (note: dated Sept 10, outside the 72h window).",
+      "why": "Payments networks are positioning as the control point for agent checkout; build explicit consent flows and agent identity tokens before it becomes a compliance requirement.",
+      "source": "AI Agent Store",
+      "date": "2026-09-10",
+      "url": "https://aiagentstore.ai/ai-agent-news/this-week"
+    }
+  ]
+}

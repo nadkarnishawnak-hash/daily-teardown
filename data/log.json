@@ -1,1 +1,17 @@
-[]
+[
+  {
+    "date": "2026-09-15",
+    "kind": "teardown",
+    "business": "Yoto",
+    "archetype": "razor-and-blades",
+    "subject": "Yoto's $128M year came off a $100 box, but the profit is in $6-$15 cards",
+    "takeaway": "Sell the thing they buy once at cost, and own the thing they buy again. The model only prints money when the repeat purchase is technically or legally impossible to buy from anyone else.",
+    "recency": "Founded 2017 (Music Business Worldwide, 2024); in 2026 it became the poster child of the kids-tech backlash, profiled by The New York Times in late June/early July 2026 and by Forbes on 18 August 2026, weeks after a Los Angeles jury found Meta and Google liable on 25 March 2026 for designing feeds to addict a minor.",
+    "confidence": "Medium-high: 2024 revenue and losses come from Yoto's filed accounts as reported by the Financial Times and relayed in a July 2026 teardown; pricing is public. Card-level gross margin is not disclosed, and a GetLatka estimate of $44.2M ARR contradicts the filings, so treat third-party revenue estimates as noise.",
+    "url": "https://yotoplay.com",
+    "page_rel": "editions/2026-09-15-yoto.html",
+    "mp3_url": "https://github.com/nadkarnishawnak-hash/daily-teardown/releases/download/ep-2026-09-15/2026-09-15-yoto.mp3",
+    "requested": null,
+    "id": "4bcdeb40"
+  }
+]

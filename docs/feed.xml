@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0"
+     xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd"
+     xmlns:atom="http://www.w3.org/2005/Atom"
+     xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>The Daily Teardown</title>
+    <link>https://nadkarnishawnak-hash.github.io/daily-teardown/</link>
+    <atom:link href="https://nadkarnishawnak-hash.github.io/daily-teardown/feed.xml" rel="self" type="application/rss+xml"/>
+    <language>en-us</language>
+    <copyright>&#169; 2026 The Daily Teardown</copyright>
+    <description>One real, recent business torn down every morning: the numbers, the model, why it works, and how you'd start one. Sundays connect the week's patterns.</description>
+    <itunes:subtitle>One real business torn down every morning.</itunes:subtitle>
+    <itunes:author>The Daily Teardown</itunes:author>
+    <itunes:owner>
+      <itunes:name>The Daily Teardown</itunes:name>
+      <itunes:email>nadkarnishawnak@gmail.com</itunes:email>
+    </itunes:owner>
+    <itunes:image href="https://nadkarnishawnak-hash.github.io/daily-teardown/cover.png"/>
+    <image>
+      <url>https://nadkarnishawnak-hash.github.io/daily-teardown/cover.png</url>
+      <title>The Daily Teardown</title>
+      <link>https://nadkarnishawnak-hash.github.io/daily-teardown/</link>
+    </image>
+    <itunes:category text="Business">
+      <itunes:category text="Entrepreneurship"/>
+    </itunes:category>
+    <itunes:explicit>false</itunes:explicit>
+    <itunes:type>episodic</itunes:type>
+    <lastBuildDate>Tue, 15 Sep 2026 17:53:14 +0000</lastBuildDate>
+    <item>
+      <title>Yoto (razor-and-blades)</title>
+      <itunes:title>Yoto (razor-and-blades)</itunes:title>
+      <description>Yoto makes a screen-free audio player for young kids: a rubber-cased box with no camera, no microphone, no ads and no algorithm. The child picks up a physical card, slides it into a slot on top, and a story, album or lesson plays. It started on Kickstarter and now sells across the US, UK, Canada, Australia, New Zealand, Singapore and Hong Kong.
+
+Takeaway: Sell the thing they buy once at cost, and own the thing they buy again. The model only prints money when the repeat purchase is technically or legally impossible to buy from anyone else.
+
+Read it: https://nadkarnishawnak-hash.github.io/daily-teardown/editions/2026-09-15-yoto.html</description>
+      <itunes:summary>Yoto makes a screen-free audio player for young kids: a rubber-cased box with no camera, no microphone, no ads and no algorithm. The child picks up a physical card, slides it into a slot on top, and a story, album or lesson plays. It started on Kickstarter and now sells across the US, UK, Canada, Australia, New Zealand, Singapore and Hong Kong.
+
+Takeaway: Sell the thing they buy once at cost, and own the thing they buy again. The model only prints money when the repeat purchase is technically or legally impossible to buy from anyone else.
+
+Read it: https://nadkarnishawnak-hash.github.io/daily-teardown/editions/2026-09-15-yoto.html</itunes:summary>
+      <link>https://nadkarnishawnak-hash.github.io/daily-teardown/editions/2026-09-15-yoto.html</link>
+      <guid isPermaLink="false">nadkarnishawnak-hash/daily-teardown:2026-09-15:b4855e08a4</guid>
+      <pubDate>Tue, 15 Sep 2026 13:41:20 -0400</pubDate>
+      <enclosure url="https://github.com/nadkarnishawnak-hash/daily-teardown/releases/download/ep-2026-09-15/2026-09-15-yoto.mp3" length="1569168" type="audio/mpeg"/>
+      <itunes:duration>4:22</itunes:duration>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:explicit>false</itunes:explicit>
+      <itunes:image href="https://nadkarnishawnak-hash.github.io/daily-teardown/cover.png"/>
+    </item>
+  </channel>
+</rss>

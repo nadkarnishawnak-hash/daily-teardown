@@ -1,1 +1,16 @@
-[]
+[
+  {
+    "date": "2026-09-15",
+    "title": "Yoto (razor-and-blades)",
+    "slug": "yoto",
+    "kind": "teardown",
+    "description": "Yoto makes a screen-free audio player for young kids: a rubber-cased box with no camera, no microphone, no ads and no algorithm. The child picks up a physical card, slides it into a slot on top, and a story, album or lesson plays. It started on Kickstarter and now sells across the US, UK, Canada, Australia, New Zealand, Singapore and Hong Kong.\n\nTakeaway: Sell the thing they buy once at cost, and own the thing they buy again. The model only prints money when the repeat purchase is technically or legally impossible to buy from anyone else.\n\nRead it: https://nadkarnishawnak-hash.github.io/daily-teardown/editions/2026-09-15-yoto.html",
+    "mp3_url": "https://github.com/nadkarnishawnak-hash/daily-teardown/releases/download/ep-2026-09-15/2026-09-15-yoto.mp3",
+    "bytes": 1569168,
+    "duration_sec": 262,
+    "page_url": "https://nadkarnishawnak-hash.github.io/daily-teardown/editions/2026-09-15-yoto.html",
+    "guid": "nadkarnishawnak-hash/daily-teardown:2026-09-15:b4855e08a4",
+    "pub_date": "2026-09-15T13:41:20.435825-04:00",
+    "tts": "edge"
+  }
+]

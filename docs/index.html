@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Daily Teardown</title>
+<link rel="alternate" type="application/rss+xml" title="The Daily Teardown" href="feed.xml">
+<style>
+  :root{color-scheme:light dark}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;background:#f3f4f6;color:#111827}
+  @media (prefers-color-scheme:dark){body{background:#0f172a;color:#e5e7eb} .card{background:#1e293b!important;border-color:#334155!important} input{background:#1e293b;color:#e5e7eb;border-color:#334155!important} .meta,.take{color:#94a3b8!important}}
+  .wrap{max-width:760px;margin:0 auto;padding:32px 16px}
+  header{display:flex;gap:18px;align-items:center;margin-bottom:22px}
+  header img{width:96px;height:96px;border-radius:12px}
+  h1{margin:0 0 4px;font-size:26px}
+  .sub{color:#6b7280;font-size:14px}
+  .links a{margin-right:14px;font-size:14px}
+  input{width:100%;box-sizing:border-box;padding:12px 14px;font-size:16px;border:1px solid #d1d5db;border-radius:10px;margin:18px 0}
+  .card{display:block;background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:16px 18px;margin-bottom:12px;text-decoration:none;color:inherit}
+  .card:hover{border-color:#9ca3af}
+  .meta{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#6b7280;margin-bottom:4px}
+  .name{font-size:18px;font-weight:700;margin-bottom:4px}
+  .hook{font-size:15px;margin-bottom:6px}
+  .take{font-size:14px;color:#4b5563}
+  .count{font-size:13px;color:#6b7280;margin-bottom:10px}
+</style></head>
+<body><div class="wrap">
+<header><img src="cover.png" alt=""><div>
+  <h1>The Daily Teardown</h1>
+  <div class="sub">One real, recent business torn down every morning: the numbers, the model, why it works, and how you&#x27;d start one. Sundays connect the week&#x27;s patterns.</div>
+  <div class="links" style="margin-top:8px"><a href="feed.xml">RSS feed</a><a href="https://github.com/nadkarnishawnak-hash/daily-teardown">Repo</a></div>
+</div></header>
+<input id="q" type="search" placeholder="Search businesses, archetypes, takeaways..." autofocus>
+<div class="count" id="count"></div>
+<div id="list"></div>
+<script>
+const DATA = [{"date": "2026-09-15", "business": "Yoto", "archetype": "razor-and-blades", "subject": "Yoto's $128M year came off a $100 box, but the profit is in $6-$15 cards", "takeaway": "Sell the thing they buy once at cost, and own the thing they buy again. The model only prints money when the repeat purchase is technically or legally impossible to buy from anyone else.", "kind": "teardown", "url": "editions/2026-09-15-yoto.html", "audio": "https://github.com/nadkarnishawnak-hash/daily-teardown/releases/download/ep-2026-09-15/2026-09-15-yoto.mp3"}];
+const list = document.getElementById('list'), count = document.getElementById('count'), q = document.getElementById('q');
+function esc(s){return String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+function render(){
+  const term = q.value.trim().toLowerCase();
+  const rows = DATA.filter(e => !term || [e.business,e.archetype,e.subject,e.takeaway,e.date].join(' ').toLowerCase().includes(term));
+  count.textContent = rows.length + ' edition' + (rows.length===1?'':'s');
+  list.innerHTML = rows.map(e => `<a class="card" href="${esc(e.url||'#')}">
+    <div class="meta">${esc(e.date)} &middot; ${esc(e.kind==='synthesis'?'Sunday synthesis':e.archetype)}${e.audio?' &middot; &#9654; audio':''}</div>
+    <div class="name">${esc(e.business)}</div>
+    <div class="hook">${esc(e.subject)}</div>
+    <div class="take">${esc(e.takeaway)}</div></a>`).join('');
+}
+q.addEventListener('input', render); render();
+</script>
+</div></body></html>
