@@ -1,0 +1,7 @@
+{
+  "items": [
+    {"lane": "ai", "what": "SAMPLE: An agent framework shipped a scheduled-run feature.", "why": "Recurring back-office jobs no longer need a human to press go.", "source": "Sample", "date": "2026-01-01", "url": "https://example.com/ai"},
+    {"lane": "startup", "what": "SAMPLE: A two-person productized-service shop raised a $3M seed.", "why": "Investors are funding service businesses again if the delivery is systematized.", "source": "Sample", "date": "2026-01-01", "url": "https://example.com/startup"},
+    {"lane": "dtc", "what": "SAMPLE: A DTC brand cut CAC 30% by moving spend from Meta to creator whitelisting.", "why": "Worth a test if your Meta CPMs climbed this quarter.", "source": "Sample", "date": "2026-01-01", "url": "https://example.com/dtc"}
+  ]
+}

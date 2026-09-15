@@ -1,0 +1,5 @@
+anthropic>=1.0.0
+requests>=2.32
+edge-tts>=7.0
+mutagen>=1.47
+pillow>=10.1

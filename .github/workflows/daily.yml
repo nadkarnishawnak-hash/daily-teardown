@@ -1,0 +1,113 @@
+name: Daily Teardown
+
+on:
+  schedule:
+    # GitHub cron is UTC and can't follow DST, so we fire twice and let a guard pick the 7am ET one.
+    - cron: "10 11 * * *"   # 7:10 EDT (Mar-Nov)  /  6:10 EST -> skipped
+    - cron: "10 12 * * *"   # 8:10 EDT -> skipped (already published)  /  7:10 EST (Nov-Mar)
+  workflow_dispatch:
+    inputs:
+      force:
+        description: "Regenerate even if today's edition already exists"
+        type: boolean
+        default: false
+      fixture:
+        description: "Dry run with sample content (no LLM cost; still sends email + audio)"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write   # commit data/, docs/, archive/ and create releases (MP3 hosting)
+  pages: write      # deploy the feed + archive site
+  id-token: write   # required by actions/deploy-pages
+
+concurrency:
+  group: daily-teardown
+  cancel-in-progress: false
+
+jobs:
+  edition:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Time guard (only run in the 7-8am ET window on scheduled triggers)
+        id: guard
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "run=true" >> "$GITHUB_OUTPUT"; exit 0
+          fi
+          H=$(TZ=America/New_York date +%-H)
+          if [ "$H" -ge 7 ] && [ "$H" -le 8 ]; then
+            echo "run=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "run=false" >> "$GITHUB_OUTPUT"
+            echo "ET hour is $H; not the 7am slot. Skipping."
+          fi
+
+      - uses: actions/setup-python@v5
+        if: steps.guard.outputs.run == 'true'
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install
+        if: steps.guard.outputs.run == 'true'
+        run: pip install -r requirements.txt
+
+      - name: Build, publish audio, and send today's edition
+        if: steps.guard.outputs.run == 'true'
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GMAIL_ADDRESS: ${{ secrets.GMAIL_ADDRESS }}
+          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+          RECIPIENT_EMAIL: ${{ secrets.RECIPIENT_EMAIL }}
+          ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          GOOGLE_TTS_API_KEY: ${{ secrets.GOOGLE_TTS_API_KEY }}
+          TTS_PROVIDER: ${{ vars.TTS_PROVIDER }}
+          TTS_VOICE: ${{ vars.TTS_VOICE }}
+          CLAUDE_MODEL: ${{ vars.CLAUDE_MODEL }}
+          CLAUDE_EFFORT: ${{ vars.CLAUDE_EFFORT }}
+          PODCAST_TITLE: ${{ vars.PODCAST_TITLE }}
+          PODCAST_AUTHOR: ${{ vars.PODCAST_AUTHOR }}
+          SITE_URL: ${{ vars.SITE_URL }}
+          JARVIS_WORKER_URL: ${{ vars.JARVIS_WORKER_URL }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          python -m src.run --publish \
+            ${{ inputs.force && '--force' || '' }} \
+            ${{ inputs.fixture && '--fixture' || '' }}
+
+      - name: Commit log, archive, and feed
+        if: steps.guard.outputs.run == 'true'
+        run: |
+          git config user.name "daily-teardown-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add data docs archive
+          if git diff --cached --quiet; then
+            echo "Nothing to commit."
+          else
+            git commit -m "Edition $(TZ=America/New_York date +%F)"
+            git pull --rebase origin "${GITHUB_REF_NAME}" || true
+            git push
+          fi
+
+      - uses: actions/configure-pages@v5
+        if: steps.guard.outputs.run == 'true'
+        continue-on-error: true   # if auto-enable lacks permission, set Settings -> Pages -> Source: GitHub Actions once
+        with:
+          enablement: true
+
+      - uses: actions/upload-pages-artifact@v3
+        if: steps.guard.outputs.run == 'true'
+        with:
+          path: docs
+
+      - id: deploy
+        uses: actions/deploy-pages@v4
+        if: steps.guard.outputs.run == 'true'

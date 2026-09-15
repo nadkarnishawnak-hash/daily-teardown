@@ -1,0 +1,41 @@
+{
+  "business": "Example Cold Plunge Co (SAMPLE)",
+  "url": "https://example.com",
+  "archetype": "razor-and-blades",
+  "recency": "SAMPLE DATA. Every number below is invented so you can test the pipeline without spending anything.",
+  "subject": "SAMPLE: a $49 tub makes 3x its price back on filters within a year",
+  "confidence": "None. This is placeholder content for testing the email, audio and feed.",
+  "setup": "A direct-to-consumer brand sells a cheap inflatable cold-plunge tub. The tub is priced so low that it barely covers the cost of shipping it. Customers keep it in the garage and use it every morning.",
+  "guess_prompt": "Before you scroll: who is the economic buyer here, and where do you think the actual profit comes from?",
+  "numbers": [
+    {"label": "Revenue / run-rate", "value": "$4.2M ARR (sample)", "source": "Sample source, 2026", "url": "https://example.com/source-1"},
+    {"label": "Pricing", "value": "$49 tub; $29/month filter + chiller-cartridge subscription", "source": "Sample pricing page, 2026", "url": "https://example.com/pricing"},
+    {"label": "Margins / unit economics", "value": "Tub: ~0% gross margin. Consumables: ~78% gross margin, est. 14-month average subscription life", "source": "Sample interview, 2026", "url": "https://example.com/source-2"},
+    {"label": "Funding / exit", "value": "Bootstrapped (sample)", "source": "Sample, 2026", "url": "https://example.com/source-3"}
+  ],
+  "model": {
+    "economic_buyer": "The individual consumer, usually a 30-45 year old with a fitness habit and disposable income.",
+    "emotional_driver": "Identity. Owning the tub says 'I am the kind of person who does hard things at 6am.'",
+    "recurring_vs_one_time": "One-time hardware at cost; recurring consumables are the business.",
+    "margins": "Blended ~55% gross once a customer passes month six.",
+    "capital_to_start": "$40-80k for a first production run plus a Shopify store and a few creators.",
+    "moat": "Honestly thin: the filter cartridge is proprietary, which creates switching friction, but a competitor could copy the format.",
+    "distribution": "Short-form video of people gasping in ice water. It sells itself."
+  },
+  "why_it_works": "The tub is a customer-acquisition device, not a product. Pricing it near cost removes the objection that kills most hardware sales, and the proprietary cartridge turns every buyer into a subscription with no additional acquisition cost.",
+  "where_else": [
+    {"name": "Printer makers", "note": "The original: cheap printers, expensive ink."},
+    {"name": "Nespresso", "note": "Machines at thin margins, pods at fat ones, held together by a patented format."},
+    {"name": "Home soda makers", "note": "The device is the hook, the CO2 canister exchange is the business."}
+  ],
+  "how_to_start": {
+    "first_step": "Find a habit-based product where the consumable is boring and the hardware is exciting, then design the consumable so only you can supply it.",
+    "hardest_part": "Surviving the cash gap: you lose money on every unit for the first several months until subscriptions catch up."
+  },
+  "takeaway": "Price the exciting thing at cost and own the boring thing people keep buying.",
+  "sources": [
+    {"title": "Sample source one", "url": "https://example.com/source-1", "year": "2026"},
+    {"title": "Sample source two", "url": "https://example.com/source-2", "year": "2026"}
+  ],
+  "audio_script": "This is The Daily Teardown, and this is a sample edition, so every number you hear is made up. Today's archetype: razor and blades. Here's the hook. A forty-nine dollar inflatable cold plunge tub that makes three times its price back on filters within a year. So here's the setup. A direct-to-consumer brand sells a cheap inflatable cold plunge tub. It's priced so low it barely covers shipping. Customers keep it in the garage and use it every morning. Before I tell you how this works... take a guess. Who actually pays, and where does the money really come from? I'll give you a second. ... Okay. The buyer is the consumer, and the money is not in the tub at all. The tub is sold at roughly zero margin. The business is the twenty-nine dollar a month filter and chiller cartridge subscription, which runs at close to eighty percent gross margin and lasts, on average, about fourteen months. In this sample the company is doing about four point two million dollars a year, bootstrapped. Why does it work? Because the tub is a customer acquisition device, not a product. Pricing it near cost removes the objection that kills most hardware sales, and the proprietary cartridge turns every buyer into a subscription with no extra acquisition cost. Where else does this show up? Printers and ink. Nespresso machines and pods. Home soda makers and their gas canisters. Same shape every time. If you wanted to start one, the first step is to find a habit-based product where the consumable is boring and the hardware is exciting, then design the consumable so only you can supply it. The hardest part is surviving the cash gap, because you lose money on every unit for months until the subscriptions catch up. The takeaway: price the exciting thing at cost, and own the boring thing people keep buying. That's the sample. See you tomorrow."
+}
