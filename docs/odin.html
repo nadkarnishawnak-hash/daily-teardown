@@ -496,6 +496,9 @@ if ("mediaSession" in navigator) {
   // Headphone / steering-wheel button: pause = talk to Odin, play = resume the teardown.
   navigator.mediaSession.setActionHandler("pause", () => { if (state === "playing") enterConversation("button"); });
   navigator.mediaSession.setActionHandler("play", () => { if (state === "conversation") idleResume(); });
+  // Skip-forward = jump to the wrap-up ("anything to queue?"); skip-back = restart the teardown.
+  navigator.mediaSession.setActionHandler("nexttrack", () => { if (state === "playing" || state === "conversation") { teardown.currentTime = Math.max(0, (teardown.duration || 0) - 0.5); resumePlayback(); } });
+  navigator.mediaSession.setActionHandler("previoustrack", () => { if (state === "playing" || state === "conversation") { teardown.currentTime = 0; resumePlayback(); } });
 }
 
 // ---------------------------------------------------------------- start
