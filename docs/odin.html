@@ -221,7 +221,7 @@ let pc = null, dc = null, micTrack = null, micStream = null, micSender = null;
 let state = "init";
 let odinSpeaking = false, userSpeaking = false, responseInFlight = false, pendingTools = 0;
 let idleTimer = null, afterSpeech = null;
-const IDLE_MS = 7000;
+const IDLE_MS = 3500;   // quiet this long after Odin finishes -> resume the teardown
 
 // Mic on = the track is attached and audio streams (billed). Mic off = nothing is sent at all.
 async function setMic(on) {
