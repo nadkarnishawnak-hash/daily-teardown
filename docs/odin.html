@@ -95,6 +95,8 @@ let workerUrl = store.get("workerUrl"), pin = store.get("pin");
 //   keyword - say "Hey Odin" / "Jarvis", recognized on-device by Picovoice Porcupine   [needs PICOVOICE_ACCESS_KEY]
 //   button  - press pause on your headphones / tap the button only
 let wakeMode = store.get("wakeMode");
+const params = new URLSearchParams(location.search);
+if (params.get("wake")) { wakeMode = params.get("wake").toLowerCase(); store.set("wakeMode", wakeMode); }  // ?wake=phrase|voice|keyword|button
 try {
   const r = await fetch("odin-config.json", { cache: "no-store" });
   if (r.ok) { const j = await r.json(); if (j.workerUrl && !workerUrl) workerUrl = j.workerUrl; }
@@ -128,7 +130,6 @@ async function api(path, body) {
 }
 
 // ---------------------------------------------------------------- edition data
-const params = new URLSearchParams(location.search);
 let edition = null, logEntries = [], config = null;
 
 async function loadEdition() {
@@ -400,7 +401,7 @@ let porcupine = null, wvp = null, wakeActive = false, wakePhrase = "Hey Odin";
 let recognizer = null, phraseActive = false;
 
 function pickWakeMode() {
-  if (!wakeMode) wakeMode = config.picovoiceKey ? "keyword" : "voice";   // sensible default, no prompt
+  if (!wakeMode) wakeMode = config.picovoiceKey ? "keyword" : "phrase";   // default: cue it with "Hey Odin"
   if (wakeMode === "keyword" && !config.picovoiceKey) { log("no PICOVOICE_ACCESS_KEY on the backend; using 'voice' mode"); wakeMode = "voice"; }
   if (wakeMode === "phrase" && !(window.SpeechRecognition || window.webkitSpeechRecognition)) {
     log("this browser has no speech recognition; using 'voice' mode"); wakeMode = "voice";
