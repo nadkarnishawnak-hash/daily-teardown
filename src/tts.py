@@ -15,7 +15,7 @@ from .config import Config
 DEFAULT_VOICES = {
     "edge": "en-US-AndrewMultilingualNeural",   # free; also good: en-US-AvaMultilingualNeural, en-US-BrianMultilingualNeural
     "google": "en-US-Neural2-D",                # 1M chars/mo free (billing must be enabled)
-    "openai": "ash",                            # gpt-4o-mini-tts
+    "openai": "cedar",                          # gpt-4o-mini-tts; keep in sync with REALTIME_VOICE so Odin and the teardown are one voice
     "elevenlabs": "JBFqnCBsd6RMkjVDRZzb",       # "George", a stock ElevenLabs voice
 }
 
@@ -79,7 +79,7 @@ def _openai(text: str, voice: str, key: str) -> bytes:
             "https://api.openai.com/v1/audio/speech",
             headers={"Authorization": f"Bearer {key}"},
             json={"model": "gpt-4o-mini-tts", "voice": voice, "input": chunk, "response_format": "mp3",
-                  "instructions": "Warm, conversational podcast host. Natural pacing, light energy, clear on numbers."},
+                  "instructions": "Calm, deep, deliberate podcast host. Natural pacing with real pauses, dry warmth, no radio-announcer energy. Clear on numbers."},
             timeout=180,
         )
         r.raise_for_status()

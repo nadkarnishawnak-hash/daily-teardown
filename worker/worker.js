@@ -29,7 +29,7 @@ export default {
           modelUrl: env.PORCUPINE_MODEL_URL || PORCUPINE_MODEL_DEFAULT,
           keywordUrl: env.PORCUPINE_KEYWORD_URL || "",      // optional custom "Hey Odin" .ppn
           userName: env.USER_NAME || "sir",
-          voice: env.REALTIME_VOICE || "ash",
+          voice: env.REALTIME_VOICE || "cedar",
         }, 200, cors);
       }
       if (url.pathname === "/session" && request.method === "POST") {
@@ -104,7 +104,7 @@ async function createSession(env, body) {
         },
         transcription: { model: env.TRANSCRIBE_MODEL || "gpt-4o-mini-transcribe" },
       },
-      output: { voice: body.voice || env.REALTIME_VOICE || "ash" },
+      output: { voice: body.voice || env.REALTIME_VOICE || "cedar" },
     },
   };
 

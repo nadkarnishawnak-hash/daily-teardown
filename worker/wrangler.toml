@@ -6,6 +6,6 @@ compatibility_date = "2026-01-01"
 # Non-secret settings (secrets go in via `wrangler secret put NAME` or the dashboard):
 [vars]
 USER_NAME = "sir"
-REALTIME_VOICE = "ash"
+REALTIME_VOICE = "cedar"
 REALTIME_MODEL = "gpt-realtime"
 # ALLOWED_ORIGIN = "https://<you>.github.io"
