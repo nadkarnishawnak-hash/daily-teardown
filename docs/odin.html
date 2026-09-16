@@ -406,7 +406,7 @@ function pickWakeMode() {
   if (wakeMode === "phrase" && !(window.SpeechRecognition || window.webkitSpeechRecognition)) {
     log("this browser has no speech recognition; using 'voice' mode"); wakeMode = "voice";
   }
-  wakePhrase = wakeMode === "voice" ? "anything" : wakeMode === "button" ? "(button)" : "Hey Odin";
+  wakePhrase = wakeMode === "voice" ? "anything" : wakeMode === "button" ? "(button)" : wakeMode === "phrase" ? "Odin" : "Hey Odin";
   log("wake mode:", wakeMode);
 }
 
