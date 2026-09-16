@@ -89,6 +89,12 @@ const store = {
   set: (k, v) => { try { localStorage.setItem("odin." + k, v); } catch {} },
 };
 let workerUrl = store.get("workerUrl"), pin = store.get("pin");
+// How you interrupt the teardown:
+//   voice   - just start talking (mic stays open while it plays; best with headphones)   [no account needed]
+//   phrase  - say "Hey Odin", recognized by the browser's own speech recognition       [no account needed]
+//   keyword - say "Hey Odin" / "Jarvis", recognized on-device by Picovoice Porcupine   [needs PICOVOICE_ACCESS_KEY]
+//   button  - press pause on your headphones / tap the button only
+let wakeMode = store.get("wakeMode");
 try {
   const r = await fetch("odin-config.json", { cache: "no-store" });
   if (r.ok) { const j = await r.json(); if (j.workerUrl && !workerUrl) workerUrl = j.workerUrl; }
@@ -104,7 +110,11 @@ function askSettings(force = false) {
     if (v) { pin = v.trim(); store.set("pin", pin); }
   }
 }
-$("settings").onclick = () => askSettings(true);
+function askWakeMode() {
+  const v = prompt("How do you want to interrupt Odin?\n\n  voice   = just start talking (recommended with headphones)\n  phrase  = say 'Hey Odin' (browser speech recognition)\n  keyword = say 'Hey Odin' via Picovoice (needs its key on the backend)\n  button  = headphone pause button / on-screen button only", wakeMode || "voice");
+  if (v && ["voice", "phrase", "keyword", "button"].includes(v.trim().toLowerCase())) { wakeMode = v.trim().toLowerCase(); store.set("wakeMode", wakeMode); }
+}
+$("settings").onclick = () => { askSettings(true); askWakeMode(); };
 
 async function api(path, body) {
   const r = await fetch(workerUrl + path, {
@@ -187,8 +197,8 @@ When asked what you think, give a real, specific opinion grounded in the numbers
 Keep answers to two to four sentences unless asked to go deeper. After answering, stop; do not append "anything else?".
 
 SITUATION
-The user is listening to today's edition of The Daily Teardown (a short audio breakdown of one business). When they say your name, the audio pauses and you hear them. When they are done, you call resume_teardown and the audio continues from the same spot.
-- On wake, acknowledge in at most two words ("Yes?", "Go ahead.") and wait.
+The user is listening to today's edition of The Daily Teardown (a short audio breakdown of one business). When they interrupt (by saying your name, or simply by talking over it), the audio pauses and you hear them. When they are done, you call resume_teardown and the audio continues from the same spot.
+- If they only said your name, acknowledge in at most two words ("Yes?", "Go ahead.") and wait. If they already asked something, just answer it.
 - If they say continue / carry on / go on / keep going / thanks / that's all / play it: call resume_teardown immediately with no spoken reply.
 - If they ask you to repeat or explain a section, do it from the data below in your own words (do not call any tool for that).
 - If the answer is in today's data, use it and mention the source name in passing. If it is not, say "one moment" and call research.
@@ -250,7 +260,10 @@ async function connectRealtime() {
 
 function onEvent(ev) {
   switch (ev.type) {
-    case "input_audio_buffer.speech_started": userSpeaking = true; clearIdle(); orb("listening"); break;
+    case "input_audio_buffer.speech_started":
+      userSpeaking = true; clearIdle(); orb("listening");
+      if (state === "playing" && wakeMode === "voice") enterConversation("voice");  // you just started talking over it
+      break;
     case "input_audio_buffer.speech_stopped": userSpeaking = false; orb("thinking"); break;
     case "response.created": responseInFlight = true; break;
     case "output_audio_buffer.started": odinSpeaking = true; orb("speaking"); setStatus("Odin"); break;
@@ -347,7 +360,8 @@ async function enterConversation(reason) {
   chime();
   orb("listening"); setStatus("Listening");
   $("talk").hidden = true; $("resume").hidden = false;
-  if (reason === "wake" || reason === "button") speak("The user just called your name. Reply with at most two words, e.g. 'Yes?' or 'Go ahead.'");
+  if (reason === "voice") { /* the model heard you directly; it will answer on its own */ }
+  else if (reason === "wake" || reason === "button") speak("The user just called your name. Reply with at most two words, e.g. 'Yes?' or 'Go ahead.'");
   else if (reason === "greeting") speak(`Greet ${config.userName} in one or two sentences: good morning, name today's business and its archetype, and the length in minutes. Then ask: play it, or questions first?`);
   else if (reason === "ended") speak("The teardown just finished. In one short sentence, ask whether there's anything to queue or ask before you sign off.");
 }
@@ -357,8 +371,9 @@ async function resumePlayback() {
   clearIdle();
   afterSpeech = null;
   state = "playing";
-  await setMic(false);
-  orb("playing"); setStatus(`Say '${wakePhrase}' to interrupt`);
+  await setMic(wakeMode === "voice");
+  orb("playing");
+  setStatus(wakeMode === "voice" ? "Just start talking to interrupt" : wakeMode === "button" ? "Press pause to talk" : `Say '${wakePhrase}' to interrupt`);
   $("talk").hidden = false; $("resume").hidden = true;
   try { await teardown.play(); } catch (e) { log("play failed", String(e)); setStatus("Tap Resume"); }
   await wakeOn();
@@ -380,11 +395,23 @@ teardown.addEventListener("timeupdate", () => {
 });
 teardown.addEventListener("ended", () => { if (state === "playing") enterConversation("ended"); });
 
-// ---------------------------------------------------------------- wake word (on-device, free)
+// ---------------------------------------------------------------- wake word: four interchangeable modes
 let porcupine = null, wvp = null, wakeActive = false, wakePhrase = "Hey Odin";
+let recognizer = null, phraseActive = false;
+
+function pickWakeMode() {
+  if (!wakeMode) wakeMode = config.picovoiceKey ? "keyword" : "voice";   // sensible default, no prompt
+  if (wakeMode === "keyword" && !config.picovoiceKey) { log("no PICOVOICE_ACCESS_KEY on the backend; using 'voice' mode"); wakeMode = "voice"; }
+  if (wakeMode === "phrase" && !(window.SpeechRecognition || window.webkitSpeechRecognition)) {
+    log("this browser has no speech recognition; using 'voice' mode"); wakeMode = "voice";
+  }
+  wakePhrase = wakeMode === "voice" ? "anything" : wakeMode === "button" ? "(button)" : "Hey Odin";
+  log("wake mode:", wakeMode);
+}
 
 async function initWake() {
-  if (!config.picovoiceKey) { log("no PICOVOICE_ACCESS_KEY; wake word disabled (use the button or headphone pause)"); return; }
+  pickWakeMode();
+  if (wakeMode !== "keyword") return;
   try {
     const pv = await import("https://esm.sh/@picovoice/porcupine-web@3");
     const wv = await import("https://esm.sh/@picovoice/web-voice-processor@4");
@@ -405,13 +432,41 @@ async function initWake() {
     log("wake word ready:", wakePhrase);
     if (wakePhrase !== "Hey Odin") log("tip: add docs/hey_odin.ppn to use 'Hey Odin' (see worker/README.md)");
   } catch (e) {
-    log("wake word failed to load:", String(e.message || e), "- falling back to the button / headphone pause");
-    porcupine = null;
+    log("Picovoice failed to load:", String(e.message || e), "- switching to 'voice' mode");
+    porcupine = null; wakeMode = "voice"; wakePhrase = "anything";
   }
 }
+
 function onWake(detection) { log("wake", detection && detection.label); if (state === "playing") enterConversation("wake"); }
-async function wakeOn() { if (porcupine && !wakeActive) { try { await wvp.subscribe(porcupine); wakeActive = true; } catch (e) { log("wake on failed", String(e)); } } }
-async function wakeOff() { if (porcupine && wakeActive) { try { await wvp.unsubscribe(porcupine); } catch {} wakeActive = false; } }
+
+// Browser speech recognition listening for the name (free; audio goes to the browser vendor's recognizer).
+function phraseOn() {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR || phraseActive) return;
+  recognizer = new SR();
+  recognizer.continuous = true; recognizer.interimResults = true; recognizer.lang = "en-US";
+  recognizer.onresult = e => {
+    for (let i = e.resultIndex; i < e.results.length; i++) {
+      const t = (e.results[i][0].transcript || "").toLowerCase();
+      if (/\b(hey\s+)?(odin|oden|odom|owen)\b/.test(t)) { log("heard:", t.trim()); phraseOff(); if (state === "playing") enterConversation("wake"); return; }
+    }
+  };
+  recognizer.onerror = e => { if (e.error !== "no-speech" && e.error !== "aborted") log("speech recognition error:", e.error); };
+  recognizer.onend = () => { if (phraseActive) { try { recognizer.start(); } catch {} } };  // keep it alive
+  phraseActive = true;
+  try { recognizer.start(); } catch (e) { log("speech recognition start failed", String(e)); phraseActive = false; }
+}
+function phraseOff() { phraseActive = false; try { recognizer && recognizer.stop(); } catch {} }
+
+async function wakeOn() {
+  if (wakeMode === "keyword" && porcupine && !wakeActive) { try { await wvp.subscribe(porcupine); wakeActive = true; } catch (e) { log("wake on failed", String(e)); } }
+  else if (wakeMode === "phrase") phraseOn();
+  // voice mode: the realtime mic stays open (see resumePlayback); button mode: nothing to arm
+}
+async function wakeOff() {
+  if (porcupine && wakeActive) { try { await wvp.unsubscribe(porcupine); } catch {} wakeActive = false; }
+  if (phraseActive) phraseOff();
+}
 
 // ---------------------------------------------------------------- small comforts
 let audioCtx = null;
