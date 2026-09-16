@@ -347,8 +347,9 @@ function idleResume() {
   if (state !== "conversation") return;
   if (userSpeaking || odinSpeaking || responseInFlight || pendingTools > 0) { armIdle(); return; }
   if (teardown.ended || teardown.currentTime >= (teardown.duration || Infinity) - 1) { endSession(); return; }
-  const line = teardown.currentTime < 1 ? "Say only: Here it is." : "Say only: Picking up where we left off.";
-  speak(line, resumePlayback);
+  if (teardown.currentTime < 1) { speak("Say only: Here it is.", resumePlayback); return; }
+  chime();            // no announcement: a soft cue, then the teardown just continues
+  resumePlayback();
 }
 
 async function enterConversation(reason) {
