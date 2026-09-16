@@ -12,5 +12,19 @@
     "guid": "nadkarnishawnak-hash/daily-teardown:2026-09-15:b4855e08a4",
     "pub_date": "2026-09-15T13:41:20.435825-04:00",
     "tts": "edge"
+  },
+  {
+    "date": "2026-09-16",
+    "title": "SF Compute (San Francisco Compute Company) (arbitrage)",
+    "slug": "sf-compute-san-francisco-compute-company",
+    "kind": "teardown",
+    "description": "Big GPU clusters are sold the way office towers are leased: in one-to-three-year blocks, to whoever can sign a long contract. SF Compute is a roughly 30-person San Francisco company, founded in 2023, that lets AI teams get serious compute for hours or days instead of years, and lets whoever already signed the long contract do something with the hours they are not using. It publishes live prices for H100 and H200 capacity the way an exchange publishes a tape.\n\nTakeaway: When a market only sells in one size or one term, the distance between how a thing is sold and how it is actually needed is itself a business. You do not need to own the asset to get paid for closing that distance, but you do need to be willing to hold the risk nobody else will.\n\nRead it: https://nadkarnishawnak-hash.github.io/daily-teardown/editions/2026-09-16-sf-compute-san-francisco-compute-company.html",
+    "mp3_url": "https://github.com/nadkarnishawnak-hash/daily-teardown/releases/download/ep-2026-09-16/2026-09-16-sf-compute-san-francisco-compute-company.mp3",
+    "bytes": 1522080,
+    "duration_sec": 254,
+    "page_url": "https://nadkarnishawnak-hash.github.io/daily-teardown/editions/2026-09-16-sf-compute-san-francisco-compute-company.html",
+    "guid": "nadkarnishawnak-hash/daily-teardown:2026-09-16:0370f83074",
+    "pub_date": "2026-09-16T07:20:48.287698-04:00",
+    "tts": "edge"
   }
 ]

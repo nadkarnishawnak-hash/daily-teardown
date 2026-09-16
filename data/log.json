@@ -13,5 +13,20 @@
     "mp3_url": "https://github.com/nadkarnishawnak-hash/daily-teardown/releases/download/ep-2026-09-15/2026-09-15-yoto.mp3",
     "requested": null,
     "id": "4bcdeb40"
+  },
+  {
+    "date": "2026-09-16",
+    "kind": "teardown",
+    "business": "SF Compute (San Francisco Compute Company)",
+    "archetype": "arbitrage",
+    "subject": "A 30-person company that owns zero GPUs manages over $100M of them",
+    "takeaway": "When a market only sells in one size or one term, the distance between how a thing is sold and how it is actually needed is itself a business. You do not need to own the asset to get paid for closing that distance, but you do need to be willing to hold the risk nobody else will.",
+    "recency": "Founded 2023; closed a $40M Series A at a $300M valuation in December 2025 (DCD, citing WSJ), hired Voltage Park's ex-CEO as CTO, and spent 2026 getting written up as the stock market for GPUs (DailyDropout.FYI, July 2026).",
+    "confidence": "Medium-high: funding terms, headcount, and the >$100M-of-hardware-managed figure all come from a December 2025 DCD report citing the WSJ. Revenue and take rate are not public, so the spread economics are inferred from the model, not verified.",
+    "url": "https://sfcompute.com/",
+    "page_rel": "editions/2026-09-16-sf-compute-san-francisco-compute-company.html",
+    "mp3_url": "https://github.com/nadkarnishawnak-hash/daily-teardown/releases/download/ep-2026-09-16/2026-09-16-sf-compute-san-francisco-compute-company.mp3",
+    "requested": null,
+    "id": "0661189e"
   }
 ]

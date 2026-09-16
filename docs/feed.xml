@@ -27,7 +27,29 @@
     </itunes:category>
     <itunes:explicit>false</itunes:explicit>
     <itunes:type>episodic</itunes:type>
-    <lastBuildDate>Tue, 15 Sep 2026 17:53:14 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 16 Sep 2026 11:34:40 +0000</lastBuildDate>
+    <item>
+      <title>SF Compute (San Francisco Compute Company) (arbitrage)</title>
+      <itunes:title>SF Compute (San Francisco Compute Company) (arbitrage)</itunes:title>
+      <description>Big GPU clusters are sold the way office towers are leased: in one-to-three-year blocks, to whoever can sign a long contract. SF Compute is a roughly 30-person San Francisco company, founded in 2023, that lets AI teams get serious compute for hours or days instead of years, and lets whoever already signed the long contract do something with the hours they are not using. It publishes live prices for H100 and H200 capacity the way an exchange publishes a tape.
+
+Takeaway: When a market only sells in one size or one term, the distance between how a thing is sold and how it is actually needed is itself a business. You do not need to own the asset to get paid for closing that distance, but you do need to be willing to hold the risk nobody else will.
+
+Read it: https://nadkarnishawnak-hash.github.io/daily-teardown/editions/2026-09-16-sf-compute-san-francisco-compute-company.html</description>
+      <itunes:summary>Big GPU clusters are sold the way office towers are leased: in one-to-three-year blocks, to whoever can sign a long contract. SF Compute is a roughly 30-person San Francisco company, founded in 2023, that lets AI teams get serious compute for hours or days instead of years, and lets whoever already signed the long contract do something with the hours they are not using. It publishes live prices for H100 and H200 capacity the way an exchange publishes a tape.
+
+Takeaway: When a market only sells in one size or one term, the distance between how a thing is sold and how it is actually needed is itself a business. You do not need to own the asset to get paid for closing that distance, but you do need to be willing to hold the risk nobody else will.
+
+Read it: https://nadkarnishawnak-hash.github.io/daily-teardown/editions/2026-09-16-sf-compute-san-francisco-compute-company.html</itunes:summary>
+      <link>https://nadkarnishawnak-hash.github.io/daily-teardown/editions/2026-09-16-sf-compute-san-francisco-compute-company.html</link>
+      <guid isPermaLink="false">nadkarnishawnak-hash/daily-teardown:2026-09-16:0370f83074</guid>
+      <pubDate>Wed, 16 Sep 2026 07:20:48 -0400</pubDate>
+      <enclosure url="https://github.com/nadkarnishawnak-hash/daily-teardown/releases/download/ep-2026-09-16/2026-09-16-sf-compute-san-francisco-compute-company.mp3" length="1522080" type="audio/mpeg"/>
+      <itunes:duration>4:14</itunes:duration>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:explicit>false</itunes:explicit>
+      <itunes:image href="https://nadkarnishawnak-hash.github.io/daily-teardown/cover.png"/>
+    </item>
     <item>
       <title>Yoto (razor-and-blades)</title>
       <itunes:title>Yoto (razor-and-blades)</itunes:title>

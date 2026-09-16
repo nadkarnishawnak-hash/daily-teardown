@@ -1,0 +1,137 @@
+{
+  "date": "2026-09-16",
+  "kind": "teardown",
+  "title": "SF Compute (San Francisco Compute Company)",
+  "archetype": "arbitrage",
+  "mp3_url": "https://github.com/nadkarnishawnak-hash/daily-teardown/releases/download/ep-2026-09-16/2026-09-16-sf-compute-san-francisco-compute-company.mp3",
+  "page_url": "https://nadkarnishawnak-hash.github.io/daily-teardown/editions/2026-09-16-sf-compute-san-francisco-compute-company.html",
+  "duration_sec": 254,
+  "data": {
+    "business": "SF Compute (San Francisco Compute Company)",
+    "url": "https://sfcompute.com/",
+    "archetype": "arbitrage",
+    "recency": "Founded 2023; closed a $40M Series A at a $300M valuation in December 2025 (DCD, citing WSJ), hired Voltage Park's ex-CEO as CTO, and spent 2026 getting written up as the stock market for GPUs (DailyDropout.FYI, July 2026).",
+    "subject": "A 30-person company that owns zero GPUs manages over $100M of them",
+    "confidence": "Medium-high: funding terms, headcount, and the >$100M-of-hardware-managed figure all come from a December 2025 DCD report citing the WSJ. Revenue and take rate are not public, so the spread economics are inferred from the model, not verified.",
+    "setup": "Big GPU clusters are sold the way office towers are leased: in one-to-three-year blocks, to whoever can sign a long contract. SF Compute is a roughly 30-person San Francisco company, founded in 2023, that lets AI teams get serious compute for hours or days instead of years, and lets whoever already signed the long contract do something with the hours they are not using. It publishes live prices for H100 and H200 capacity the way an exchange publishes a tape.",
+    "guess_prompt": "Before you scroll: who has the budget here, the AI startup renting an hour or the data center sitting on stranded capacity? And where does the margin come from when the company owns none of the chips?",
+    "numbers": [
+      {
+        "label": "Revenue / run-rate",
+        "value": "Not disclosed. Hard proxy: $40M Series A at a $300M valuation (Dec 2025), plus >$100M of hardware under management",
+        "source": "Data Center Dynamics, 2025 (citing the Wall Street Journal)",
+        "url": "https://www.datacenterdynamics.com/en/news/sf-compute-raises-40m-for-ai-compute-marketplace-offering/"
+      },
+      {
+        "label": "Pricing",
+        "value": "Public, posted clearing prices for Nvidia H100 and H200 capacity, sold on flexible short-term contracts rather than multi-year lock-ins; B300s flagged as coming",
+        "source": "Data Center Dynamics, 2025",
+        "url": "https://www.datacenterdynamics.com/en/news/sf-compute-raises-40m-for-ai-compute-marketplace-offering/"
+      },
+      {
+        "label": "Margins / unit economics",
+        "value": "Owns zero GPUs while managing >$100M of hardware with ~30 employees. est. $3.3M of hardware under management per head ($100M / 30). Capital-light: no chips, no concrete, no long-dated debt, so the spread between long-dated and short-dated compute is close to pure contribution",
+        "source": "Data Center Dynamics, 2025",
+        "url": "https://www.datacenterdynamics.com/en/news/sf-compute-raises-40m-for-ai-compute-marketplace-offering/"
+      },
+      {
+        "label": "Funding / exit",
+        "value": "$40M Series A at a $300M valuation, led by DCVC and Wing Venture Capital, with Electric Capital and Alt Capital participating (Dec 2025). No exit.",
+        "source": "Data Center Dynamics / eWEEK, 2025",
+        "url": "https://www.eweek.com/news/sf-compute-ai-funding/"
+      }
+    ],
+    "model": {
+      "economic_buyer": "Two payers, one spread. AI labs, research teams and startups who need a big cluster for nine days and have compute budget but no appetite for a three-year commitment. And on the other side, data centers and enterprises already holding contracted capacity they are not using, who would rather recover cash than watch paid-for hardware idle. Both are paying for liquidity they cannot create themselves.",
+      "emotional_driver": "Fear of the lock-in. Nobody wants to be the person who signed a 36-month GPU contract for a model that got deprecated in month seven. On the sell side it is the sting of paying for idle metal every single night.",
+      "recurring_vs_one_time": "Transactional, but structurally repeating. Training and inference demand is lumpy and constant, so the same buyers come back every cycle. It behaves like recurring revenue without a subscription.",
+      "margins": "Spread-based and capital-light. Take rate is not public, so treat exact margin as unknown. What is known is the leverage: >$100M of hardware intermediated by ~30 people who own none of it (DCD, 2025). The cost of goods is the capacity contract; everything above it is the duration and access premium.",
+      "capital_to_start": "$50k-$500k for a copycat in a different commodity. The software is trivial. The money goes to being the buyer of last resort on your own market for the first months, plus the legal work of standing behind contracts you did not originate.",
+      "moat": "Honestly, thin on technology. The moat is liquidity and a public price. Once one venue has real prices and real fills, both sides default to it, and a second venue with no volume is useless to everyone. Add trust: you are selling someone else's hardware and eating the failure risk.",
+      "distribution": "Word of mouth inside AI engineering circles, public posted prices as marketing (transparency is the ad), founder visibility, and investor networks pushing portfolio companies toward it. Hiring the former CEO of a GPU cloud as CTO buys supply-side relationships too."
+    },
+    "why_it_works": "Data centers must sell long because lenders underwrite long contracts, and AI teams must buy short because nobody can forecast what a model will need in eighteen months. That mismatch is not a temporary inefficiency, it is baked into how each side is financed, which means the price of a GPU-hour on a three-year contract and the price of the same GPU-hour next Tuesday will keep diverging. SF Compute stands in that gap, converts long and illiquid into short and liquid, and keeps part of the difference, without ever buying a chip or having to be right about where GPU prices go.",
+    "where_else": [
+      {
+        "name": "Freight brokerage (C.H. Robinson and every three-person brokerage that copies it)",
+        "note": "Holds truckload capacity at contract rates and sells it into the spot market; owns no trucks, and the margin is purely knowing where the empty ones are."
+      },
+      {
+        "name": "Seats.aero",
+        "note": "Airlines price the same seat differently in miles and in cash; the product is simply the map of that gap, sold to people who could never find it themselves."
+      }
+    ],
+    "how_to_start": {
+      "first_step": "Pick one asset sold in a size nobody actually wants: warehouse space leased by the year, commercial kitchen time, lab equipment, machine hours, dark fiber. Call five owners this week, ask what percentage of the month it sits idle, then find one buyer who has been turned away for being too small and broker a single deal by hand in a spreadsheet. No product, no code, just proof the gap is real and someone will pay it.",
+      "hardest_part": "The cold start. An empty market is worthless to both sides, so for the first stretch you have to be the buyer of last resort with your own cash, holding inventory you may not resell. That is balance-sheet risk, not a coding problem, and it is what stops the clones."
+    },
+    "takeaway": "When a market only sells in one size or one term, the distance between how a thing is sold and how it is actually needed is itself a business. You do not need to own the asset to get paid for closing that distance, but you do need to be willing to hold the risk nobody else will.",
+    "sources": [
+      {
+        "title": "SF Compute raises $40m for AI compute marketplace offering",
+        "url": "https://www.datacenterdynamics.com/en/news/sf-compute-raises-40m-for-ai-compute-marketplace-offering/",
+        "year": "2025"
+      },
+      {
+        "title": "SF Compute Raises $40M to Build Marketplace for AI Compute Capacity",
+        "url": "https://www.eweek.com/news/sf-compute-ai-funding/",
+        "year": "2025"
+      },
+      {
+        "title": "SF Compute: The Stock Market for GPUs",
+        "url": "https://dailydropout.substack.com/p/sf-compute-the-stock-market-for-gpus",
+        "year": "2026"
+      },
+      {
+        "title": "Spheron vs SF Compute: GPU Marketplace vs Cluster Market Compared",
+        "url": "https://www.spheron.network/blog/spheron-vs-sf-compute/",
+        "year": "2026"
+      },
+      {
+        "title": "How SF Compute corners the offtake market",
+        "url": "https://www.thedeepview.com/articles/how-sf-compute-corners-to-offtake-market",
+        "year": "2025"
+      },
+      {
+        "title": "SF Compute (official site, live H100/H200 pricing)",
+        "url": "https://sfcompute.com/",
+        "year": "2026"
+      }
+    ],
+    "audio_script": "This is The Daily Teardown for Wednesday, September sixteenth, twenty twenty-six. Today's archetype: arbitrage.\n\nHere's the setup. If you want a big pile of Nvidia GPUs right now, the market basically offers you one deal. Sign a contract for one to three years, commit the cash, and hope you still need the metal in year two. That's how data centers finance themselves. Long money, long contracts.\n\nBut almost nobody needs compute that way. A research team needs two thousand chips for nine days. A startup needs a burst before a launch and then nothing for a month. So you get a world that is simultaneously full of idle silicon and full of people who cannot get any.\n\nThat gap, between how compute is sold and how compute is actually used, is the entire business of a company called SF Compute.\n\nBefore I tell you how the money moves... take a guess. Who actually pays, and how does the money flow? I'll give you a second.\n\n...\n\nBoth sides pay, and the company owns nothing. SF Compute runs a market where whoever already signed the long contract can resell the hours they aren't using, and buyers who refuse to get locked into multi-year deals can rent short. Data Center Dynamics covered their Series A in December twenty twenty-five. Forty million dollars, at a three hundred million dollar valuation per the Wall Street Journal, led by DCVC and Wing Venture Capital.\n\nHere's the number I keep coming back to. That same piece says SF Compute does not own a single one of the GPUs it provides access to, but it manages more than a hundred million dollars of hardware with a team of about thirty people. Call it three point three million dollars of hardware under management per employee. That's my estimate, a hundred million divided by thirty, but it tells you the shape of the thing. No concrete, no substation, no five-year debt. It's a trading desk wearing a startup hoodie.\n\nThe archetype is arbitrage, and it's a specific flavor. Duration arbitrage. Long-dated compute is cheap and illiquid. Short-dated compute is expensive and scarce. If you stand in the middle and convert one into the other, you keep part of the difference, and you never have to be right about where GPU prices go next.\n\nWhy does it work? Because the gap is not a bug somebody will patch. Data centers have to sell long, because lenders underwrite long contracts. AI teams have to buy short, because nobody knows what their model will need in eighteen months. Both sides are rational and the mismatch is permanent. One investor, Ali Tamaseb at DCVC, described it as unlocking liquidity and price discovery in a market that was rigid and hard to access. That word, access, is the whole thing. Arbitrage is almost never about being smarter than the other guy. It's about being the only door.\n\nWhere else does this show up? Freight brokers have run this play for a century. They hold truckload capacity at contract rates and sell it into the spot market, and the margin is just knowing where the empty trucks are. Award travel sites run the information version. Airlines price the same seat differently in miles and in cash, and a tool like Seats dot aero sells you the map of that gap.\n\nHow would you start one? Not with GPUs. That ship has sailed and it is capital hungry. Look for anything sold in one size but needed in another. Warehouse space leased by the year, wanted by the week. Commercial kitchen time. Lab equipment. Dark fiber. Find someone sitting on a paid-for asset that idles half the month, find a buyer who has been told no because they are too small, and broker one deal by hand this week in a spreadsheet. You need zero product to test whether the gap is real.\n\nThe hardest part is not software. It's the cold start. A market with no liquidity is worthless to both sides, so for the first stretch you personally have to be the buyer of last resort, and that takes real cash and real nerve. That kills copycats, not the code.\n\nThe takeaway. When a market only sells one size or one term, the distance between how a thing is sold and how it is actually needed is itself a business, and you do not have to own the asset to get paid for closing that distance.\n\nThat's the teardown. See you tomorrow."
+  },
+  "quick": [
+    {
+      "lane": "startup",
+      "what": "Intel spinoff Cornelis Networks raised $205M led by IAG Capital Partners and launched Active Compute Fabric, a GPU-agnostic AI networking layer, with Qualcomm signed as a rack-scale inference partner; CN5000 400 Gbps ships now, CN6000 800 Gbps in Q4.",
+      "why": "Interconnect is where Nvidia's lock-in and margin sit, so a funded open alternative is the first real pricing pressure on AI infra costs.",
+      "source": "TechCrunch",
+      "date": "2026-09-14",
+      "url": "https://techcrunch.com/2026/09/14/ai-infrastructure-company-cornelis-raises-205m-to-chip-away-at-nvidias-dominance/"
+    },
+    {
+      "lane": "ai",
+      "what": "Apple opened the English public beta of its rebuilt Siri, powered by models custom-built with Google's Gemini, split between on-device and Private Cloud Compute, with daily limits on some server-backed features and no EU or China availability.",
+      "why": "Apple outsourcing the model layer and rate-limiting inference is a live signal that assistant unit economics are still brutal at scale.",
+      "source": "Apple Newsroom",
+      "date": "2026-09-15",
+      "url": "https://apple.com/newsroom/2026/09/siri-ai-a-profoundly-more-capable-and-personal-assistant-is-here"
+    },
+    {
+      "lane": "ai",
+      "what": "Perplexity's Portable Computer agent went live in its Windows app for Nvidia RTX GPUs with 24GB+ VRAM, running model, harness, orchestrator and scheduler on-device with a default local Qwen model and permission prompts before any cloud call.",
+      "why": "A fully local agent changes the compliance calculus for workflows touching customer data, contracts or anything you can't send to a vendor API.",
+      "source": "NVIDIA Blog",
+      "date": "2026-09-15",
+      "url": "https://blogs.nvidia.com/blog/local-ai-perplexity-windows-pcs/"
+    },
+    {
+      "lane": "ai",
+      "what": "Anthropic reported its continuous-integration workload grew 25x in six months, with engineers shipping roughly 8x more code per quarter and Claude authoring about 80% of it; test volume rose 10x, forcing a move to change-based test-impact analysis.",
+      "why": "Agentic coding shifts cost rather than removing it: verification infra scales faster than your dev savings, so price CI and QA in before you commit.",
+      "source": "Anthropic",
+      "date": "2026-09-14",
+      "url": "https://claude.com/blog/agentic-coding-is-straining-ci-heres-how-we-scaled-test-impact-analysis-at-anthropic"
+    }
+  ]
+}

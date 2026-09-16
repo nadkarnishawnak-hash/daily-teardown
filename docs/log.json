@@ -8,5 +8,15 @@
     "takeaway": "Sell the thing they buy once at cost, and own the thing they buy again. The model only prints money when the repeat purchase is technically or legally impossible to buy from anyone else.",
     "page_rel": "editions/2026-09-15-yoto.html",
     "mp3_url": "https://github.com/nadkarnishawnak-hash/daily-teardown/releases/download/ep-2026-09-15/2026-09-15-yoto.mp3"
+  },
+  {
+    "date": "2026-09-16",
+    "kind": "teardown",
+    "business": "SF Compute (San Francisco Compute Company)",
+    "archetype": "arbitrage",
+    "subject": "A 30-person company that owns zero GPUs manages over $100M of them",
+    "takeaway": "When a market only sells in one size or one term, the distance between how a thing is sold and how it is actually needed is itself a business. You do not need to own the asset to get paid for closing that distance, but you do need to be willing to hold the risk nobody else will.",
+    "page_rel": "editions/2026-09-16-sf-compute-san-francisco-compute-company.html",
+    "mp3_url": "https://github.com/nadkarnishawnak-hash/daily-teardown/releases/download/ep-2026-09-16/2026-09-16-sf-compute-san-francisco-compute-company.mp3"
   }
 ]
