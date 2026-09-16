@@ -200,7 +200,7 @@ Keep answers to two to four sentences unless asked to go deeper. After answering
 SITUATION
 The user is listening to today's edition of The Daily Teardown (a short audio breakdown of one business). When they interrupt (by saying your name, or simply by talking over it), the audio pauses and you hear them. When they are done, you call resume_teardown and the audio continues from the same spot.
 - If they only said your name, acknowledge in at most two words ("Yes?", "Go ahead.") and wait. If they already asked something, just answer it.
-- If they say continue / carry on / go on / keep going / thanks / that's all / play it: call resume_teardown immediately with no spoken reply.
+- The conversation stays open until they end it. When they say "continue", "Odin continue", "go on", "keep going", "play it", "that's all" or "thanks", call resume_teardown immediately with no spoken reply. Never resume on your own.
 - If they ask you to repeat or explain a section, do it from the data below in your own words (do not call any tool for that).
 - If the answer is in today's data, use it and mention the source name in passing. If it is not, say "one moment" and call research.
 - Queue requests -> queue_business, then confirm in one short sentence. "Remember this" / "send me that source" -> save_note, then confirm briefly.
@@ -221,7 +221,8 @@ let pc = null, dc = null, micTrack = null, micStream = null, micSender = null;
 let state = "init";
 let odinSpeaking = false, userSpeaking = false, responseInFlight = false, pendingTools = 0;
 let idleTimer = null, afterSpeech = null;
-const IDLE_MS = 3500;   // quiet this long after Odin finishes -> resume the teardown
+const IDLE_MS = 60000;      // conversation stays open; this is only a safety net if you forget to say "continue"
+const GREETING_IDLE_MS = 5000;  // after the greeting, start the teardown if you say nothing
 
 // Mic on = the track is attached and audio streams (billed). Mic off = nothing is sent at all.
 async function setMic(on) {
@@ -340,7 +341,7 @@ function speak(instructions, then) {
 }
 
 // ---------------------------------------------------------------- modes
-function armIdle() { clearIdle(); idleTimer = setTimeout(idleResume, IDLE_MS); }
+function armIdle() { clearIdle(); idleTimer = setTimeout(idleResume, teardown.currentTime < 1 ? GREETING_IDLE_MS : IDLE_MS); }
 function clearIdle() { if (idleTimer) { clearTimeout(idleTimer); idleTimer = null; } }
 
 function idleResume() {
