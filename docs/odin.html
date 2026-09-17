@@ -369,8 +369,16 @@ async function enterConversation(reason) {
   $("talk").hidden = true; $("resume").hidden = false;
   if (reason === "voice") { /* the model heard you directly; it will answer on its own */ }
   else if (reason === "wake" || reason === "button") speak("The user just called your name. Reply with at most two words, e.g. 'Yes?' or 'Go ahead.'");
-  else if (reason === "greeting") speak(`Greet ${config.userName} in one or two sentences: good morning, name today's business and its archetype, and the length in minutes. Then ask: play it, or questions first?`);
+  else if (reason === "greeting") { /* handled by greet() */ }
   else if (reason === "ended") speak("The teardown just finished. In one short sentence, ask whether there's anything to queue or ask before you sign off.");
+}
+
+async function greet() {
+  // One line from Odin, then the recording starts. No question, no waiting.
+  state = "greeting";
+  await setMic(false);
+  orb("speaking"); setStatus("Odin");
+  speak(`Say one short sentence, nothing more: greet ${config.userName}, name today's business and its archetype, and end with "say Odin any time." Then stop.`, resumePlayback);
 }
 
 async function resumePlayback() {
@@ -381,8 +389,8 @@ async function resumePlayback() {
   await setMic(wakeMode === "voice");
   orb("playing");
   setStatus(wakeMode === "voice" ? "Just start talking to interrupt" : wakeMode === "button" ? "Press pause to talk" : `Say '${wakePhrase}' to interrupt`);
-  $("talk").hidden = false; $("resume").hidden = true;
-  try { await teardown.play(); } catch (e) { log("play failed", String(e)); setStatus("Tap Resume"); }
+  $("talk").hidden = false; $("resume").hidden = true; $("resume").textContent = "Resume";
+  try { await teardown.play(); } catch (e) { log("play failed", String(e)); setStatus("Tap Play to start the recording"); $("resume").textContent = "Play"; $("resume").hidden = false; }
   await wakeOn();
 }
 
@@ -518,7 +526,7 @@ $("start").onclick = async () => {
   $("start").disabled = true;
   // Unlock audio inside the tap (iOS refuses play() that isn't traceable to a user gesture).
   try { audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)(); audioCtx.resume(); } catch {}
-  try { teardown.muted = true; await teardown.play(); teardown.pause(); teardown.currentTime = 0; teardown.muted = false; } catch {}
+  try { await teardown.play(); teardown.pause(); teardown.currentTime = 0; log("audio unlocked"); } catch (e) { log("audio unlock failed:", String(e)); }
   try {
     askSettings();
     if (!workerUrl || !pin) throw new Error("backend URL and PIN are required");
@@ -529,8 +537,7 @@ $("start").onclick = async () => {
     await connectRealtime();
     await initWake();
     $("start").hidden = true;
-    state = "greeting";
-    await enterConversation("greeting");
+    await greet();
   } catch (e) {
     log("start failed:", String(e.message || e));
     setStatus("Error: " + (e.message || e));
