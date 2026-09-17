@@ -340,8 +340,8 @@ function speak(instructions, then) {
   afterSpeech = then || null;
   send({ type: "response.create", response: { instructions } });
   if (then) {
-    // Safety net: if no audio ever starts (rare), run the follow-up anyway.
-    setTimeout(() => { if (afterSpeech === then) { afterSpeech = null; then(); } }, 6000);
+    // Safety net: if Odin's audio never starts (rare), run the follow-up anyway. If he IS speaking, wait for him.
+    setTimeout(() => { if (afterSpeech === then && !odinSpeaking) { log("speak: no audio started; continuing"); afterSpeech = null; then(); } }, 8000);
   }
 }
 
@@ -483,7 +483,14 @@ function phraseOn() {
     }
   };
   recognizer.onstart = () => log("recognizer listening");
-  recognizer.onerror = e => { if (e.error !== "no-speech" && e.error !== "aborted") log("speech recognition error:", e.error); };
+  recognizer.onerror = e => {
+    if (e.error === "no-speech" || e.error === "aborted") return;
+    log("speech recognition error:", e.error);
+    if (e.error === "not-allowed" || e.error === "service-not-allowed" || e.error === "audio-capture") {
+      phraseActive = false;
+      setStatus("Speech recognition blocked (" + e.error + "): use the Hey Odin button");
+    }
+  };
   recognizer.onend = () => { if (phraseActive) { try { recognizer.start(); } catch {} } };  // keep it alive
   phraseActive = true;
   try { recognizer.start(); } catch (e) { log("speech recognition start failed", String(e)); phraseActive = false; }
@@ -495,6 +502,7 @@ function interruptOdin() {
   log("interrupting Odin");
   send({ type: "response.cancel" });
   send({ type: "output_audio_buffer.clear" });
+  odinSpeaking = false; setMic(true);
   chime();
   orb("listening"); setStatus("Listening");
 }
@@ -551,6 +559,7 @@ $("start").onclick = async () => {
   // Unlock audio inside the tap (iOS refuses play() that isn't traceable to a user gesture).
   try { audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)(); audioCtx.resume(); } catch {}
   try { await teardown.play(); teardown.pause(); teardown.currentTime = 0; log("audio unlocked"); } catch (e) { log("audio unlock failed:", String(e)); }
+  try { const SR = window.SpeechRecognition || window.webkitSpeechRecognition; if (SR) { const r = new SR(); r.onerror = e => log("recognizer prime:", e.error); r.start(); setTimeout(() => { try { r.abort(); } catch {} }, 250); log("recognizer primed"); } } catch (e) { log("recognizer prime failed:", String(e)); }
   try {
     askSettings();
     if (!workerUrl || !pin) throw new Error("backend URL and PIN are required");
@@ -570,6 +579,8 @@ $("start").onclick = async () => {
 };
 
 try { await loadEdition(); setStatus("Tap start"); } catch (e) { setStatus("No edition published yet"); log(String(e)); }
+// Test hook: lets an automated harness read internal state (harmless in normal use).
+window.__odin = () => ({ state, wakeMode, muted: teardown.muted, paused: teardown.paused, time: teardown.currentTime, holdingAt, odinSpeaking, phraseActive, responseInFlight, pendingTools, status: $("status").textContent });
 </script>
 </body>
 </html>

@@ -5,3 +5,4 @@ __pycache__/
 .venv/
 .claude/
 docs/mock/
+docs/test/
