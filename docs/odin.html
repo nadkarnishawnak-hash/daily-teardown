@@ -221,7 +221,7 @@ ${recent || "(none yet)"}`;
 let pc = null, dc = null, micTrack = null, micStream = null, micSender = null;
 let state = "init";
 let odinSpeaking = false, userSpeaking = false, responseInFlight = false, pendingTools = 0;
-let idleTimer = null, afterSpeech = null;
+let idleTimer = null, afterSpeech = null, holdingAt = null;
 const IDLE_MS = 3000;       // quiet this long after Odin answers -> the recording continues by itself
 const GREETING_IDLE_MS = 5000;  // after the greeting, start the teardown if you say nothing
 
@@ -316,7 +316,7 @@ async function handleToolCalls(response) {
           respond = false; output = { ok: true, resumed_at_seconds: Math.round(teardown.currentTime) };
           resumePlayback(); break;
         case "restart_teardown":
-          respond = false; teardown.currentTime = 0; resumePlayback(); break;
+          respond = false; holdingAt = null; teardown.currentTime = 0; resumePlayback(); break;
         case "queue_business":
           output = await api("/action", { action: "queue_business", request: args.name_or_url, note: args.note || "" }); break;
         case "save_note":
@@ -362,7 +362,7 @@ async function enterConversation(reason) {
   if (state === "conversation" || state === "ended") return;
   state = "conversation";
   clearIdle();
-  teardown.pause();
+  if (!teardown.paused) { holdingAt = teardown.currentTime; teardown.muted = true; }   // hold silently instead of pausing (see resumePlayback)
   await wakeOff();
   await setMic(true);
   chime();
@@ -391,7 +391,15 @@ async function resumePlayback() {
   orb("playing");
   setStatus(wakeMode === "voice" ? "Just start talking to interrupt" : wakeMode === "button" ? "Press pause to talk" : `Say '${wakePhrase}' to interrupt`);
   $("talk").hidden = false; $("resume").hidden = true; $("resume").textContent = "Resume";
-  try { await teardown.play(); } catch (e) { log("play failed", String(e)); setStatus("Tap Play to start the recording"); $("resume").textContent = "Play"; $("resume").hidden = false; }
+  // iOS refuses play() once the mic/recognizer have touched the audio session, so we never pause the recording:
+  // during a conversation it keeps "playing" muted and we jump back to the remembered spot on resume.
+  if (holdingAt !== null) { teardown.currentTime = holdingAt; holdingAt = null; }
+  teardown.muted = false;
+  if (teardown.paused) {
+    let ok = false;
+    for (let i = 0; i < 4 && !ok; i++) { try { await teardown.play(); ok = true; } catch (e) { log("play failed", String(e)); await sleep(300); } }
+    if (!ok) { setStatus("Tap Play to start the recording"); $("resume").textContent = "Play"; $("resume").hidden = false; }
+  }
   await wakeOn();
 }
 
@@ -407,6 +415,7 @@ function endSession() {
 }
 
 teardown.addEventListener("timeupdate", () => {
+  if (holdingAt !== null && teardown.currentTime - holdingAt > 20) teardown.currentTime = holdingAt;   // keep the muted hold from running off
   if (teardown.duration) $("bar").style.width = `${(teardown.currentTime / teardown.duration) * 100}%`;
 });
 teardown.addEventListener("ended", () => { if (state === "playing") enterConversation("ended"); });
@@ -529,8 +538,8 @@ if ("mediaSession" in navigator) {
   navigator.mediaSession.setActionHandler("pause", () => { if (state === "playing") enterConversation("button"); });
   navigator.mediaSession.setActionHandler("play", () => { if (state === "conversation") idleResume(); });
   // Skip-forward = jump to the wrap-up ("anything to queue?"); skip-back = restart the teardown.
-  navigator.mediaSession.setActionHandler("nexttrack", () => { if (state === "playing" || state === "conversation") { teardown.currentTime = Math.max(0, (teardown.duration || 0) - 0.5); resumePlayback(); } });
-  navigator.mediaSession.setActionHandler("previoustrack", () => { if (state === "playing" || state === "conversation") { teardown.currentTime = 0; resumePlayback(); } });
+  navigator.mediaSession.setActionHandler("nexttrack", () => { if (state === "playing" || state === "conversation") { holdingAt = null; teardown.currentTime = Math.max(0, (teardown.duration || 0) - 0.5); resumePlayback(); } });
+  navigator.mediaSession.setActionHandler("previoustrack", () => { if (state === "playing" || state === "conversation") { holdingAt = null; teardown.currentTime = 0; resumePlayback(); } });
 }
 
 // ---------------------------------------------------------------- start
