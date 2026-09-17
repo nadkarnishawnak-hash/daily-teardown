@@ -268,10 +268,14 @@ function onEvent(ev) {
       break;
     case "input_audio_buffer.speech_stopped": userSpeaking = false; orb("thinking"); break;
     case "response.created": responseInFlight = true; break;
-    case "output_audio_buffer.started": odinSpeaking = true; orb("speaking"); setStatus("Odin"); break;
+    case "output_audio_buffer.started":
+      odinSpeaking = true; orb("speaking"); setStatus("Odin");
+      if (state !== "playing") setMic(false);   // half-duplex: never let the mic hear Odin through the speaker
+      break;
     case "output_audio_buffer.stopped":
     case "output_audio_buffer.cleared":
       odinSpeaking = false;
+      if (state === "conversation") setMic(true);   // your turn again
       if (afterSpeech) { const f = afterSpeech; afterSpeech = null; f(); }
       else if (state === "conversation") { orb("listening"); setStatus("Listening"); armIdle(); }
       break;
@@ -403,7 +407,7 @@ let porcupine = null, wvp = null, wakeActive = false, wakePhrase = "Hey Odin";
 let recognizer = null, phraseActive = false;
 
 function pickWakeMode() {
-  if (!wakeMode) wakeMode = config.picovoiceKey ? "keyword" : "phrase";   // default: cue it with "Hey Odin"
+  if (!wakeMode || (wakeMode === "voice" && params.get("wake") !== "voice")) wakeMode = config.picovoiceKey ? "keyword" : "phrase";   // default: cue with "Odin"; "voice" only when asked for explicitly via ?wake=voice
   if (wakeMode === "keyword" && !config.picovoiceKey) { log("no PICOVOICE_ACCESS_KEY on the backend; using 'voice' mode"); wakeMode = "voice"; }
   if (wakeMode === "phrase" && !(window.SpeechRecognition || window.webkitSpeechRecognition)) {
     log("this browser has no speech recognition; using 'voice' mode"); wakeMode = "voice";
@@ -451,9 +455,11 @@ function phraseOn() {
   recognizer.onresult = e => {
     for (let i = e.resultIndex; i < e.results.length; i++) {
       const t = (e.results[i][0].transcript || "").toLowerCase();
-      if (/\b(hey\s+)?(odin|oden|odom|owen)\b/.test(t)) { log("heard:", t.trim()); phraseOff(); if (state === "playing") enterConversation("wake"); return; }
+      if (e.results[i].isFinal) log("heard:", t.trim());
+      if (/\b(hey\s+)?(odin|oden|odeon)\b/.test(t)) { log("CUE:", t.trim()); phraseOff(); if (state === "playing") enterConversation("wake"); return; }
     }
   };
+  recognizer.onstart = () => log("recognizer listening");
   recognizer.onerror = e => { if (e.error !== "no-speech" && e.error !== "aborted") log("speech recognition error:", e.error); };
   recognizer.onend = () => { if (phraseActive) { try { recognizer.start(); } catch {} } };  // keep it alive
   phraseActive = true;
