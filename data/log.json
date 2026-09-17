@@ -28,5 +28,20 @@
     "mp3_url": "https://github.com/nadkarnishawnak-hash/daily-teardown/releases/download/ep-2026-09-16/2026-09-16-sf-compute-san-francisco-compute-company.mp3",
     "requested": null,
     "id": "0661189e"
+  },
+  {
+    "date": "2026-09-17",
+    "kind": "teardown",
+    "business": "Crosby (Crosby Legal, Inc.)",
+    "archetype": "productized service",
+    "subject": "Crosby's 1,000th contract took 173 days. Now it does 1,000 every three weeks.",
+    "takeaway": "If you bill by the hour, getting better at your job lowers your income. Fix the price to a tightly defined outcome and every efficiency you find becomes margin instead of a smaller invoice, which is the only way a service business gets software-like economics.",
+    "recency": "Came out of stealth June 17, 2025 as an AI-native law firm; raised a $20M Series A in October 2025 and a $60M Series B led by Lux and Index on March 31, 2026.",
+    "confidence": "Medium-high: funding terms, contract throughput, turnaround rate and the fixed-fee model are all stated by the founders on Crosby's own 2025-2026 posts and pricing copy. Exact per-document price and ARR are not public, so the revenue figure is an explicit estimate.",
+    "url": "https://crosby.ai/",
+    "page_rel": "editions/2026-09-17-crosby-crosby-legal-inc.html",
+    "mp3_url": "https://github.com/nadkarnishawnak-hash/daily-teardown/releases/download/ep-2026-09-17/2026-09-17-crosby-crosby-legal-inc.mp3",
+    "requested": null,
+    "id": "3205761a"
   }
 ]

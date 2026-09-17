@@ -26,5 +26,19 @@
     "guid": "nadkarnishawnak-hash/daily-teardown:2026-09-16:0370f83074",
     "pub_date": "2026-09-16T07:20:48.287698-04:00",
     "tts": "edge"
+  },
+  {
+    "date": "2026-09-17",
+    "title": "Crosby (Crosby Legal, Inc.) (productized service)",
+    "slug": "crosby-crosby-legal-inc",
+    "kind": "teardown",
+    "description": "Crosby is an actual registered law firm, not legal software, with 50+ licensed attorneys, malpractice insurance, and AI agents doing the first pass on commercial contracts: NDAs, MSAs, DPAs. Fast-growing software companies including Cursor, Clay and Gumloop send it the paper that sits between a signed deal and recognized revenue. Over 90% of documents come back in a few hours instead of weeks.\n\nTakeaway: If you bill by the hour, getting better at your job lowers your income. Fix the price to a tightly defined outcome and every efficiency you find becomes margin instead of a smaller invoice, which is the only way a service business gets software-like economics.\n\nRead it: https://nadkarnishawnak-hash.github.io/daily-teardown/editions/2026-09-17-crosby-crosby-legal-inc.html",
+    "mp3_url": "https://github.com/nadkarnishawnak-hash/daily-teardown/releases/download/ep-2026-09-17/2026-09-17-crosby-crosby-legal-inc.mp3",
+    "bytes": 1618848,
+    "duration_sec": 270,
+    "page_url": "https://nadkarnishawnak-hash.github.io/daily-teardown/editions/2026-09-17-crosby-crosby-legal-inc.html",
+    "guid": "nadkarnishawnak-hash/daily-teardown:2026-09-17:aba1b460bf",
+    "pub_date": "2026-09-17T07:20:10.158728-04:00",
+    "tts": "edge"
   }
 ]

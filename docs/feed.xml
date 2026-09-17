@@ -27,7 +27,29 @@
     </itunes:category>
     <itunes:explicit>false</itunes:explicit>
     <itunes:type>episodic</itunes:type>
-    <lastBuildDate>Wed, 16 Sep 2026 11:34:40 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 17 Sep 2026 11:28:46 +0000</lastBuildDate>
+    <item>
+      <title>Crosby (Crosby Legal, Inc.) (productized service)</title>
+      <itunes:title>Crosby (Crosby Legal, Inc.) (productized service)</itunes:title>
+      <description>Crosby is an actual registered law firm, not legal software, with 50+ licensed attorneys, malpractice insurance, and AI agents doing the first pass on commercial contracts: NDAs, MSAs, DPAs. Fast-growing software companies including Cursor, Clay and Gumloop send it the paper that sits between a signed deal and recognized revenue. Over 90% of documents come back in a few hours instead of weeks.
+
+Takeaway: If you bill by the hour, getting better at your job lowers your income. Fix the price to a tightly defined outcome and every efficiency you find becomes margin instead of a smaller invoice, which is the only way a service business gets software-like economics.
+
+Read it: https://nadkarnishawnak-hash.github.io/daily-teardown/editions/2026-09-17-crosby-crosby-legal-inc.html</description>
+      <itunes:summary>Crosby is an actual registered law firm, not legal software, with 50+ licensed attorneys, malpractice insurance, and AI agents doing the first pass on commercial contracts: NDAs, MSAs, DPAs. Fast-growing software companies including Cursor, Clay and Gumloop send it the paper that sits between a signed deal and recognized revenue. Over 90% of documents come back in a few hours instead of weeks.
+
+Takeaway: If you bill by the hour, getting better at your job lowers your income. Fix the price to a tightly defined outcome and every efficiency you find becomes margin instead of a smaller invoice, which is the only way a service business gets software-like economics.
+
+Read it: https://nadkarnishawnak-hash.github.io/daily-teardown/editions/2026-09-17-crosby-crosby-legal-inc.html</itunes:summary>
+      <link>https://nadkarnishawnak-hash.github.io/daily-teardown/editions/2026-09-17-crosby-crosby-legal-inc.html</link>
+      <guid isPermaLink="false">nadkarnishawnak-hash/daily-teardown:2026-09-17:aba1b460bf</guid>
+      <pubDate>Thu, 17 Sep 2026 07:20:10 -0400</pubDate>
+      <enclosure url="https://github.com/nadkarnishawnak-hash/daily-teardown/releases/download/ep-2026-09-17/2026-09-17-crosby-crosby-legal-inc.mp3" length="1618848" type="audio/mpeg"/>
+      <itunes:duration>4:30</itunes:duration>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:explicit>false</itunes:explicit>
+      <itunes:image href="https://nadkarnishawnak-hash.github.io/daily-teardown/cover.png"/>
+    </item>
     <item>
       <title>SF Compute (San Francisco Compute Company) (arbitrage)</title>
       <itunes:title>SF Compute (San Francisco Compute Company) (arbitrage)</itunes:title>
