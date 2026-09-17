@@ -200,7 +200,8 @@ Keep answers to two to four sentences unless asked to go deeper. After answering
 SITUATION
 The user is listening to today's edition of The Daily Teardown (a short audio breakdown of one business). When they interrupt (by saying your name, or simply by talking over it), the audio pauses and you hear them. When they are done, you call resume_teardown and the audio continues from the same spot.
 - If they only said your name, acknowledge in at most two words ("Yes?", "Go ahead.") and wait. If they already asked something, just answer it.
-- The conversation stays open until they end it. When they say "continue", "Odin continue", "go on", "keep going", "play it", "that's all" or "thanks", call resume_teardown immediately with no spoken reply. Never resume on your own.
+- When they say "continue", "Odin continue", "go on", "keep going", "play it", "that's all" or "thanks", call resume_teardown immediately with no spoken reply. If they go quiet after your answer, the recording resumes by itself, so do not ask "anything else?".
+- Never say your own name; the listener's phone treats "Odin" as an interruption cue.
 - If they ask you to repeat or explain a section, do it from the data below in your own words (do not call any tool for that).
 - If the answer is in today's data, use it and mention the source name in passing. If it is not, say "one moment" and call research.
 - Queue requests -> queue_business, then confirm in one short sentence. "Remember this" / "send me that source" -> save_note, then confirm briefly.
@@ -221,7 +222,7 @@ let pc = null, dc = null, micTrack = null, micStream = null, micSender = null;
 let state = "init";
 let odinSpeaking = false, userSpeaking = false, responseInFlight = false, pendingTools = 0;
 let idleTimer = null, afterSpeech = null;
-const IDLE_MS = 60000;      // conversation stays open; this is only a safety net if you forget to say "continue"
+const IDLE_MS = 3000;       // quiet this long after Odin answers -> the recording continues by itself
 const GREETING_IDLE_MS = 5000;  // after the greeting, start the teardown if you say nothing
 
 // Mic on = the track is attached and audio streams (billed). Mic off = nothing is sent at all.
@@ -270,12 +271,12 @@ function onEvent(ev) {
     case "response.created": responseInFlight = true; break;
     case "output_audio_buffer.started":
       odinSpeaking = true; orb("speaking"); setStatus("Odin");
-      if (state !== "playing") setMic(false);   // half-duplex: never let the mic hear Odin through the speaker
+      if (state !== "playing") { setMic(false); if (wakeMode === "phrase") phraseOn(); }   // half-duplex, but keep listening for the name
       break;
     case "output_audio_buffer.stopped":
     case "output_audio_buffer.cleared":
       odinSpeaking = false;
-      if (state === "conversation") setMic(true);   // your turn again
+      if (state === "conversation") { phraseOff(); setMic(true); }   // your turn again
       if (afterSpeech) { const f = afterSpeech; afterSpeech = null; f(); }
       else if (state === "conversation") { orb("listening"); setStatus("Listening"); armIdle(); }
       break;
@@ -464,7 +465,12 @@ function phraseOn() {
     for (let i = e.resultIndex; i < e.results.length; i++) {
       const t = (e.results[i][0].transcript || "").toLowerCase();
       if (e.results[i].isFinal) log("heard:", t.trim());
-      if (/\b(hey\s+)?(odin|oden|odeon)\b/.test(t)) { log("CUE:", t.trim()); phraseOff(); if (state === "playing") enterConversation("wake"); return; }
+      if (/\b(hey\s+)?(odin|oden|odeon)\b/.test(t)) {
+        log("CUE:", t.trim()); phraseOff();
+        if (state === "playing") enterConversation("wake");
+        else if (odinSpeaking) interruptOdin();
+        return;
+      }
     }
   };
   recognizer.onstart = () => log("recognizer listening");
@@ -474,6 +480,15 @@ function phraseOn() {
   try { recognizer.start(); } catch (e) { log("speech recognition start failed", String(e)); phraseActive = false; }
 }
 function phraseOff() { phraseActive = false; try { recognizer && recognizer.stop(); } catch {} }
+
+// Cut Odin off mid-sentence: cancel the response and flush the audio already queued on the phone.
+function interruptOdin() {
+  log("interrupting Odin");
+  send({ type: "response.cancel" });
+  send({ type: "output_audio_buffer.clear" });
+  chime();
+  orb("listening"); setStatus("Listening");
+}
 
 async function wakeOn() {
   if (wakeMode === "keyword" && porcupine && !wakeActive) { try { await wvp.subscribe(porcupine); wakeActive = true; } catch (e) { log("wake on failed", String(e)); } }
