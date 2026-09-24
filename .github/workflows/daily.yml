@@ -1,10 +1,10 @@
 name: Daily Teardown
 
 on:
-  schedule:
-    # GitHub cron is UTC and can't follow DST, so we fire twice and let a guard pick the 7am ET one.
-    - cron: "10 11 * * *"   # 7:10 EDT (Mar-Nov)  /  6:10 EST -> skipped
-    - cron: "10 12 * * *"   # 8:10 EDT -> skipped (already published)  /  7:10 EST (Nov-Mar)
+  # PAUSED 2026-09-24: the daily schedule is off. To resume, uncomment the two cron lines below.
+  # schedule:
+  #   - cron: "10 11 * * *"   # 7:10 EDT (Mar-Nov)  /  6:10 EST -> skipped
+  #   - cron: "10 12 * * *"   # 8:10 EDT -> skipped (already published)  /  7:10 EST (Nov-Mar)
   workflow_dispatch:
     inputs:
       force:

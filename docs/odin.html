@@ -233,6 +233,19 @@ async function setMic(on) {
 
 function send(ev) { if (dc && dc.readyState === "open") dc.send(JSON.stringify(ev)); else log("dc not open; dropped", ev.type); }
 
+// "listen" mode uses the realtime session itself as the wake-word detector: the mic stays open, but while the recording
+// plays (or Odin speaks) the server only transcribes. The page reads each transcript; "Odin" is the cue, everything
+// else is deleted so it never reaches him. In "talk" the server answers normally and lets you barge in.
+let gate = "talk", segmentGate = "talk";
+function setGate(g) {
+  if (g === gate) return;
+  gate = g;
+  send({ type: "session.update", session: { type: "realtime", audio: { input: { turn_detection: {
+    type: "server_vad", threshold: 0.55, prefix_padding_ms: 300, silence_duration_ms: 650,
+    create_response: g === "talk", interrupt_response: g === "talk" } } } } });
+}
+const CUE = /\b(hey\s+)?(odin|oden|odeon|o din)\b/i;
+
 async function connectRealtime() {
   try {
     micStream = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true } });
@@ -264,24 +277,36 @@ async function connectRealtime() {
 function onEvent(ev) {
   switch (ev.type) {
     case "input_audio_buffer.speech_started":
-      userSpeaking = true; clearIdle(); orb("listening");
+      userSpeaking = true; clearIdle(); segmentGate = gate;
+      if (gate === "talk") orb("listening");
       if (state === "playing" && wakeMode === "voice") enterConversation("voice");  // you just started talking over it
       break;
-    case "input_audio_buffer.speech_stopped": userSpeaking = false; orb("thinking"); break;
+    case "input_audio_buffer.speech_stopped": userSpeaking = false; if (gate === "talk") orb("thinking"); break;
     case "response.created": responseInFlight = true; break;
     case "output_audio_buffer.started":
       odinSpeaking = true; orb("speaking"); setStatus("Odin");
-      if (state !== "playing") { setMic(false); if (wakeMode === "phrase") phraseOn(); }   // half-duplex, but keep listening for the name
+      if (state !== "playing") {
+        if (wakeMode === "listen") setGate("cue");            // mic stays open, but only "Odin" can get through
+        else { setMic(false); if (wakeMode === "phrase") phraseOn(); }   // half-duplex, but keep listening for the name
+      }
       break;
     case "output_audio_buffer.stopped":
     case "output_audio_buffer.cleared":
       odinSpeaking = false;
-      if (state === "conversation") { phraseOff(); setMic(true); }   // your turn again
+      if (state === "conversation") { phraseOff(); setMic(true); setGate("talk"); }   // your turn again
       if (afterSpeech) { const f = afterSpeech; afterSpeech = null; f(); }
       else if (state === "conversation") { orb("listening"); setStatus("Listening"); armIdle(); }
       break;
     case "response.output_audio_transcript.done": caption("odin", ev.transcript); break;
-    case "conversation.item.input_audio_transcription.completed": caption("you", ev.transcript); break;
+    case "conversation.item.input_audio_transcription.completed": {
+      const text = ev.transcript || "";
+      if (wakeMode === "listen" && segmentGate === "cue") {
+        log("heard:", text.trim());
+        send({ type: "conversation.item.delete", item_id: ev.item_id });   // never let ambient audio pile up in his memory
+        if (CUE.test(text)) { log("CUE:", text.trim()); if (state === "playing") enterConversation("wake"); else if (odinSpeaking) interruptOdin(); }
+      } else caption("you", text);
+      break;
+    }
     case "response.done":
       responseInFlight = false;
       handleToolCalls(ev.response);
@@ -365,6 +390,7 @@ async function enterConversation(reason) {
   if (!teardown.paused) { holdingAt = teardown.currentTime; teardown.muted = true; }   // hold silently instead of pausing (see resumePlayback)
   await wakeOff();
   await setMic(true);
+  setGate("talk");
   chime();
   orb("listening"); setStatus("Listening");
   $("talk").hidden = true; $("resume").hidden = false;
@@ -387,7 +413,8 @@ async function resumePlayback() {
   clearIdle();
   afterSpeech = null;
   state = "playing";
-  await setMic(wakeMode === "voice");
+  await setMic(wakeMode === "voice" || wakeMode === "listen");
+  if (wakeMode === "listen") setGate("cue");
   orb("playing");
   setStatus(wakeMode === "voice" ? "Just start talking to interrupt" : wakeMode === "button" ? "Press pause to talk" : `Say '${wakePhrase}' to interrupt`);
   $("talk").hidden = false; $("resume").hidden = true; $("resume").textContent = "Resume";
@@ -425,12 +452,13 @@ let porcupine = null, wvp = null, wakeActive = false, wakePhrase = "Hey Odin";
 let recognizer = null, phraseActive = false;
 
 function pickWakeMode() {
-  if (!wakeMode || (wakeMode === "voice" && params.get("wake") !== "voice")) wakeMode = config.picovoiceKey ? "keyword" : "phrase";   // default: cue with "Odin"; "voice" only when asked for explicitly via ?wake=voice
+  const explicit = params.get("wake");
+  if (!explicit && (!wakeMode || wakeMode === "voice" || wakeMode === "phrase")) wakeMode = config.picovoiceKey ? "keyword" : "listen";   // default: Odin's own ears
   if (wakeMode === "keyword" && !config.picovoiceKey) { log("no PICOVOICE_ACCESS_KEY on the backend; using 'voice' mode"); wakeMode = "voice"; }
   if (wakeMode === "phrase" && !(window.SpeechRecognition || window.webkitSpeechRecognition)) {
     log("this browser has no speech recognition; using 'voice' mode"); wakeMode = "voice";
   }
-  wakePhrase = wakeMode === "voice" ? "anything" : wakeMode === "button" ? "(button)" : wakeMode === "phrase" ? "Odin" : "Hey Odin";
+  wakePhrase = wakeMode === "voice" ? "anything" : wakeMode === "button" ? "(button)" : (wakeMode === "phrase" || wakeMode === "listen") ? "Odin" : "Hey Odin";
   log("wake mode:", wakeMode);
 }
 
@@ -502,7 +530,7 @@ function interruptOdin() {
   log("interrupting Odin");
   send({ type: "response.cancel" });
   send({ type: "output_audio_buffer.clear" });
-  odinSpeaking = false; setMic(true);
+  odinSpeaking = false; setMic(true); setGate("talk");
   chime();
   orb("listening"); setStatus("Listening");
 }
